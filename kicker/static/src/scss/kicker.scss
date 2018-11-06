@@ -1,0 +1,271 @@
+/*-------------------- Variables --------------------*/
+$navbar-height: 4em;
+$bg-muted: rgb(240,240,240);
+
+/*-------------------- IS THE KICKER FREE? --------------------*/
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", "Verdana", sans-serif;
+}
+
+body {
+    overflow: hidden;  /*makes the body non-scrollable (we will add scrolling to the sidebar and main content containers)*/
+    margin: 0px;  /*removes default style*/
+    display: flex;  /*enables flex content for its children*/
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.o_kicker_bg {
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+
+$rand: random(5);
+
+.o_kicker_bg_yes {
+  background-image: url("/kicker/static/img/yes/#{$rand}.gif");
+}
+.o_kicker_bg_no {
+    background-image: url("/kicker/static/img/no/#{$rand}.gif");
+}
+
+.o_kicker_background {
+    position: fixed;
+    left: -2.5%;
+    top: -2.5%;
+    z-index: 1;
+
+    display: block;
+    width: 15%;
+    height: 15%;
+
+    filter: blur(3px);
+    transform-origin: top left;
+    transform: scale(7);
+
+}
+
+.o_kicker_free {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    margin: 0 auto;
+    z-index: 10;
+    background-size: contain;
+    max-width: 320px;
+    .o_kicker_free_content {
+        margin: 0;
+        padding: 4em;
+        color: white;
+
+        h1,h2 {
+            text-transform: uppercase;
+            line-height: 1em;
+            margin: 0 auto;
+        }
+
+        .bling-bling {
+            color: red;
+            letter-spacing: 31px;
+            background-color: rgba(255,255,255,0.6);
+            span {
+                margin-right: -28px;
+            }
+        }
+    }
+}
+
+/*-------------------- APP --------------------*/
+
+
+.o_kicker_app {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: $navbar-height 1fr 0em;
+    grid-template-areas: "topbar topbar"
+                         "sidebar main"
+                         "toast toast";
+    @media (max-width: map-get($grid-breakpoints, 'md')) {
+        grid-template-columns: 0 100%;
+    }
+}
+/* Left Sidebar */
+#sidebar {
+    grid-area: sidebar;
+    width: 250px;
+    height: 100%;
+    overflow-y: auto;
+    background-color: white;
+    border-right: 1px solid rgb(100,100,100);
+    /* top layer */
+    z-index: 9999;
+    &.active {
+      margin-left: 0;
+    }
+    transition: margin .3s ease;
+    padding: 1em;
+    
+    @media (max-width: map-get($grid-breakpoints, 'md')) {
+        margin-left: -250px;
+        position: absolute;
+        top: 0;
+        padding-top: 4em;
+    }
+    .sidebar-header {
+      padding-bottom: 1em;
+      margin-bottom: 1em;
+      border-bottom: 1px solid rgb(120,120,120);
+    }
+    img.o_kicker_profile_image {
+      width: 100px;
+    }
+    .nav > li {
+      a {
+        color: inherit;
+        background-color: inherit;
+        &:hover {
+          font-weight: 900;
+          transition: font-weight .3s ease-in-out;
+        }
+      }
+    }
+}
+
+.overlay {
+    /* full screen */
+    width: 100%;
+    height: calc(100% - #{$navbar-height});
+    /* transparent black */
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: $navbar-height;
+    left: 0;
+    display: none;
+    /* middle layer, i.e. appears below the sidebar */
+    z-index: 9998;
+}
+
+@keyframes colorchange
+   {
+     0%   {background-color: #875a7b;}
+     50%  {background-color: #21b799;}
+     100% {background-color: #875a7b;}
+   }
+
+.avatar_placeholder {
+    animation: colorchange 1.5s linear infinite;
+}
+/* Top Header */
+
+#top-header {
+  grid-area: topbar;
+  height: $navbar-height;
+  border-bottom: 1px solid rgb(100,100,100);
+
+  & > div {
+    height: $navbar-height;
+    line-height: $navbar-height;
+  }
+  #logo {
+    margin-left: 2em;
+  }
+
+  #burger-toggle {
+    width: $navbar-height;
+    height: $navbar-height;
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align: center;
+    z-index: 10000;
+  }
+
+  .o_kicker_status {
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+
+    &.o_status_free {
+      background-color: green;
+    }
+    &.o_status_busy {
+      background-color: red;
+    }
+  }
+}
+
+/* Content */
+.loader {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  padding: 5em 0;
+}
+
+.offline-toast {
+    grid-area: toast;
+    background-color: rgb(50,50,50);
+    line-height: 3em;
+    color: white;
+    text-align: center;
+}
+
+.o_kicker_main {
+  grid-area: main;
+  background-color: $bg-muted;
+  overflow-y: auto;  /*adds scroll to this container*/
+  width: 100%;
+  
+  .o_kicker_user_row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+      .o_kicker_user_card {
+        width: 150px;
+        margin-right: 15px;
+        flex: 0 0 auto;
+      }
+    }
+    .o_kicker_user_fav {
+      position: absolute;
+      top: 7px;
+      right: 22px;
+    }
+    .o_kicker_user_link {
+      color: inherit;
+      &:hover {
+          text-decoration: none;
+      }
+    }
+
+}
+
+.fab {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 0 6px 10px 0 #666;
+  transition: all 0.1s ease-in-out;
+
+  font-size: 50px;
+  color: white;
+  text-align: center;
+  line-height: 70px;
+  font-weight: 300;
+
+  position: fixed;
+  right: 1em;
+  bottom: 1em;
+  &:hover {
+    box-shadow: 0 6px 14px 0 #666;
+    transform: scale(1.05);
+    text-decoration: none;
+    color: white;
+  }
+}

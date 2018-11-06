@@ -11,7 +11,6 @@ from odoo import api, http
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.modules import get_module_resource
-from odoo.addons.base.ir.ir_qweb import AssetsBundle
 from odoo.addons.web.controllers.main import binary_content
 
 _logger = logging.getLogger(__name__)

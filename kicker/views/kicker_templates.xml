@@ -6,7 +6,7 @@
 -->
 <template id="assets_frontend" name="Common Assets (used in backend interface and website)" inherit_id="web.assets_frontend">
   <xpath expr="." position="inside">
-    <link rel='stylesheet' type="text/less" href='/kicker/static/src/less/kicker.less'/>
+    <link rel='stylesheet' type="text/less" href='/kicker/static/src/scss/kicker.scss'/>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
     <script type="text/javascript" src="/kicker/static/lib/Chart.bundle.min.js"/>
     <script type="text/javascript" src="/bus/static/src/js/bus.js"/>
@@ -66,16 +66,16 @@ App Pages Templates
         <meta name="theme-color" content="#875a7b"/>
     </t>
     <!-- Close Sidebar Button -->
-    <div id="top-header">
-        <div class="col-xs-8 col-md-10">
-            <span id="burger-toggle" class="visible-xs">
+    <div class="row" id="top-header">
+        <div class="col-md-8 col-lg-10">
+            <span id="burger-toggle" class="d-block d-md-none">
                 <i class="fa fa-bars"/>
             </span>
             <span id="logo">
                 Awesome Logo
             </span>
         </div>
-        <div class="col-xs-4 col-md-2 o_kicker_status o_status_free">
+        <div class="col-md-4 col-lg-2 o_kicker_status o_status_free">
             <strong>&#183;&#160;&#160;Free</strong>
         </div>
     </div>
@@ -90,12 +90,12 @@ App Pages Templates
       </div>
 
       <!-- Sidebar Links -->
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="/kicker/dashboard" data-router="true">Dashboard</a></li>
-        <li><a href="/kicker/profile" data-router="true">Profile</a></li>
-        <li><a href="#">Stats</a></li>
-        <li><a href="/kicker/community" data-router="true">Community</a></li>
-        <li><a href="#">Log Out</a></li>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="/kicker/dashboard" data-router="true">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/kicker/profile" data-router="true">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Stats</a></li>
+        <li class="nav-item"><a class="nav-link" href="/kicker/community" data-router="true">Community</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Log Out</a></li>
       </ul>
     </nav>
 
@@ -103,7 +103,7 @@ App Pages Templates
 
     <div class="container-fluid o_kicker_main">
       <div class="row">
-        <div class="col-md-12 o_kicker_content">
+        <div class="col-lg-12 o_kicker_content">
           <div class="loader">
               <p><i class="fa fa-3x fa-fw fa-circle-o-notch fa-spin"></i></p>
               <p>Loading...</p>
@@ -114,7 +114,7 @@ App Pages Templates
     <a href="/kicker/score" class="fab bg-primary" data-router="true">+</a>
     <div class="offline-toast hidden">
         You are currently off-line.
-        <btn class="btn btn-xs btn-default"
+        <btn class="btn btn-default"
              data-toggle="popover"
              data-title="Working Off-line"
              data-content="When off-line, you can only access cached data; posting results is disabled and some content may be out-of-date. Everything will work normally once you get back online.">So what?</btn>
