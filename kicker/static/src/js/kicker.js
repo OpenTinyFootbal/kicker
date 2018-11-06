@@ -228,7 +228,7 @@ var AddScore = Widget.extend({
             if (result.errors) {
                 console.log(result.errors);
             } else if (result.success) {
-                Router.navigate('/kicker/dashboard');
+                Router.navigate('/app/dashboard');
             }
             return result;
         }).fail(function (type, error) {
@@ -355,7 +355,7 @@ var app = new App();
 var el = $('.o_kicker_app');
 app.attachTo(el);
 
-// Register serviceworker if applicable
+/* // Register serviceworker if applicable
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/kicker/sw.js').then(function(registration) {
@@ -380,6 +380,6 @@ window.addEventListener('load', function(event) {
   window.addEventListener('online',  updateOnlineStatus);
   window.addEventListener('offline', updateOnlineStatus);
 });
-
+ */
 
 });

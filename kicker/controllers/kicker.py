@@ -63,7 +63,7 @@ class KickerController(http.Controller):
                     _logger.error("Kicker Ping failed when evaluting status")
             return False
 
-    @http.route(['/kicker/', "/kicker/<path:route>"], auth="user")
+    @http.route(['/app/', "/app/<path:route>"], auth="user")
     def app(self, **kw):
         return request.render('kicker.app', {'body_classname': 'o_kicker_app', 'user': request.env.user})
 

@@ -2,35 +2,35 @@
     <!-- Pages -->
     <t t-name="Dashboard">
         <div class="container-fluid o_kicker_main">
-            <h4>Hello <t t-esc="widget.name || 'darling'"/>,</h4>
-            <h6>You suck at this. Please stop.</h6>
+            <h5 class="text-primary"><strong>Hello <t t-esc="widget.name || 'darling'"/>,</strong></h5>
+            <h6 class="text-muted">Please note that you suck at this.</h6>
             <div class="row">
-                <div class="col-xs-12 col-lg-6">
-                    <div class="o_score_card panel">
-                        <div class="panel-body">
+                <div class="col-md-12 col-lg-6">
+                    <div class="o_score_card card">
+                        <div class="card-body">
                             <div class="row">
-                                <div class="col-xs-6">
-                                    <h4><t t-esc="widget.wins !== undefined ? widget.wins:'--'"/></h4>
-                                    <h6>Won matches</h6>
+                                <div class="col-6 gradient-border">
+                                    <h4 class="text-primary"><strong><t t-esc="widget.wins !== undefined ? widget.wins:'--'"/></strong></h4>
+                                    <h6 class="text-muted">won matches</h6>
                                 </div>
-                                <div class="col-xs-6">
-                                    <h4><t t-esc="widget.losses !== undefined ? widget.losses:'--'"/></h4>
-                                    <h6>Lost matches</h6>
+                                <div class="col-6 gradient-border">
+                                    <h4 class="text-primary"><strong><t t-esc="widget.losses !== undefined ? widget.losses:'--'"/></strong></h4>
+                                    <h6 class="text-muted">lost matches</h6>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-footer">
-                            <a href="/kicker/score" data-router="true" class="btn btn-primary btn-lg btn-block">Add Score</a>
+                        <div class="card-footer">
+                            <a href="/app/score" data-router="true" class="btn btn-outline-primary btn-lg btn-block">Add Score</a>
                         </div>
                     </div>
                     <label>Your Stats</label>
-                    <div class="panel">
-                        <div class="panel-body">
+                    <div class="card">
+                        <div class="card-body">
                             <canvas id="o_kicker_main_chart" width="400" height="400"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-lg-6">
+                <div class="col-md-12 col-lg-6">
                     <label>Your Best Teammates</label>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
@@ -70,9 +70,9 @@
         <div class="container-fluid o_kicker_main">
             <div t-if="widget.player &amp;&amp; !widget.edit" class="text-center">
                 <div class="text-right mb8 mt8">
-                    <div class="btn btn-xs o_kicker_edit">Update Profile <i class="fa fa-pencil"/></div>
+                    <button class="btn btn-xs o_kicker_edit">Update Profile <i class="fa fa-pencil"/></button>
                 </div>
-                <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="img-circle o_kicker_profile_img"/>
+                <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="rounded-circle o_kicker_profile_img"/>
                 <h3><t t-esc="widget.player.name"/></h3>
                 <t t-if="widget.player.tagline">
                     <h5><t t-esc="widget.player.tagline"/></h5>
@@ -88,31 +88,31 @@
                 </t>
                 <h6>You suck at this. Please stop.</h6>
             </div>
-            <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right form-horizontal">
+            <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right">
                 <div class="text-right mb8 mt8">
-                    <div class="btn btn-xs o_kicker_save"><i class="fa fa-check"/> Save changes</div>
+                    <button class="btn o_kicker_save"><i class="fa fa-check"/> Save changes</button>
                 </div>
-                <input type="file" class="hidden o_kicker_file_upload" name="avatar_file" accept="image/*"/>
+                <input type="file" class="d-none o_kicker_file_upload" name="avatar_file" accept="image/*"/>
                 <div class="mb16 text-center">
-                    <img class="img-circle mb16 o_kicker_profile_img" t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}"/><br/>
-                    <a href="#" class="btn btn-primary o_kicker_profile_img_select">Select Image</a>
-                    <a href="#" class="btn btn-danger o_kicker_profile_img_reset">Reset</a>
+                    <img class="rounded-circle mb16 o_kicker_profile_img" t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}"/><br/>
+                    <button class="btn btn-primary o_kicker_profile_img_select">Select Image</button>
+                    <button class="btn btn-danger o_kicker_profile_img_reset">Reset</button>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-3" for="name">Name</label>
-                    <div class="col-xs-9">
+                <div class="form-group row">
+                    <label class="control-label col-3" for="name">Name</label>
+                    <div class="col-9">
                         <input type="text" class="form-control" name="name" placeholder="Destructor" t-att-value="widget.player.name"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-3" for="Tagline">Tagline</label>
-                    <div class="col-xs-9">
+                <div class="form-group row">
+                    <label class="control-label col-3" for="Tagline">Tagline</label>
+                    <div class="col-9">
                         <input type="text" class="form-control" name="tagline" placeholder="I will destroy you all!" t-att-value="widget.player.tagline or null"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-3" for="main_kicker">Main Kicker</label>
-                    <div class="col-xs-9">
+                <div class="form-group row">
+                    <label class="control-label col-3" for="main_kicker">Main Kicker</label>
+                    <div class="col-9">
                         <select name="main_kicker" class="form-control">
                             <option value="-1">Select your default location...</option>
                             <t t-foreach="widget.kickers" t-as="kicker">
@@ -131,7 +131,7 @@
                 <div class="text-right mb8 mt8">
                     <div class="btn btn-xs btn-disabled">Update Profile <i class="fa fa-pencil"/></div>
                 </div>
-                <img src="/kicker/static/img/player.svg" class="img-circle avatar_placeholder" width="128px"/>
+                <img src="/kicker/static/img/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
                 <h3>Loading...</h3>
                 <h6>This will only take a moment.</h6>
             </div>
@@ -148,12 +148,12 @@
                         <t t-foreach="widget.usual" t-as="player">
                             <t t-call="PlayerCard">
                                 <t t-set="player.fav" t-value="player.name.indexOf('e') !== -1"/>
-                                <t t-set="card_class" t-value="'col-xs-6 col-md-3 col-lg-2'"/>
+                                <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
                             </t>
                         </t>
                     </t>
                     <t t-else="" t-call="PlayerCardLoader">
-                        <t t-set="card_class" t-value="'col-xs-6 col-md-3 col-lg-2'"/>
+                        <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
                     </t>
                 </div>
             </div>
@@ -164,12 +164,12 @@
                         <t t-foreach="widget.rare" t-as="player">
                             <t t-call="PlayerCard">
                                 <t t-set="player.fav" t-value="player.name.indexOf('e') !== -1"/>
-                                <t t-set="card_class" t-value="'col-xs-6 col-md-3 col-lg-2'"/>
+                                <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
                             </t>
                         </t>
                     </t>
                     <t t-else="" t-call="PlayerCardLoader">
-                        <t t-set="card_class" t-value="'col-xs-6 col-md-3 col-lg-2'"/>
+                        <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
                     </t>
                 </div>
             </div>
@@ -179,15 +179,15 @@
     <!--  Components -->
     <t t-name="PlayerCard">
         <div t-attf-class="{{ card_class }}">
-            <div class="panel text-center">
-                <div class="panel-body">
-                    <a t-attf-href="/kicker/community/player/{{ player.id }}" data-router="true" class="o_kicker_user_link">
+            <div class="card text-center">
+                <div class="card-body">
+                    <a t-attf-href="/app/community/player/{{ player.id }}" data-router="true" class="o_kicker_user_link">
                         <t t-if="player.hasOwnProperty('fav')">
                             <i t-attf-class="o_kicker_user_fav fa {{ player.fav ? 'fa-heart':'fa-heart-o'}}"/>
                         </t>
                         <p>
-                            <img t-if="player" t-attf-src="/kicker/avatar/{{ player.id }}" class="img-circle" width="64px"/>
-                            <img t-else="" src="/kicker/static/img/player.svg" class="img-circle" width="64px"/>
+                            <img t-if="player" t-attf-src="/kicker/avatar/{{ player.id }}" class="rounded-circle" width="64px"/>
+                            <img t-else="" src="/kicker/static/img/player.svg" class="rounded-circle" width="64px"/>
                         </p>
                         <p t-esc="player.name"/>
                         <small class="text-muted"><t t-esc="player.tagline || ''"/></small>
@@ -199,10 +199,10 @@
 
     <t t-name="PlayerCardLoader">
         <div t-attf-class="{{ card_class}}">
-            <div class="panel text-center">
-                <div class="panel-body">
+            <div class="card text-center">
+                <div class="card-body">
                     <p>
-                        <img src="/kicker/static/img/player.svg" class="img-circle avatar_placeholder" width="64px"/>
+                        <img src="/kicker/static/img/player.svg" class="rounded-circle avatar_placeholder" width="64px"/>
                     </p>
                     <p>Loading...</p>
                     <small class="text-muted">Just a sec</small>
@@ -281,7 +281,7 @@
                     <input type="number" name="score2" value="0" min="0" step="1" class="form-control"/>
                 </div>
                 <br/>
-                <button type="submit" class="btn btn-lg btn-success">Save</button>
+                <button type="submit" class="btn btn-outline-primary">Save</button>
             </form>
         </div>
     </t>

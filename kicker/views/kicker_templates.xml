@@ -7,13 +7,19 @@
 <template id="assets_frontend" name="Common Assets (used in backend interface and website)" inherit_id="web.assets_frontend">
   <xpath expr="." position="inside">
     <link rel='stylesheet' type="text/less" href='/kicker/static/src/scss/kicker.scss'/>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700" rel="stylesheet"/>
     <script type="text/javascript" src="/kicker/static/lib/Chart.bundle.min.js"/>
     <script type="text/javascript" src="/bus/static/src/js/bus.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/router.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/kicker.js"/>
     <script type="text/javascript" src="/kicker/static/lib/jquery.mobile.custom.min.js"/>
   </xpath>
+</template>
+
+<template id="_assets_frontend_helpers" inherit_id="web_editor._assets_frontend_helpers" priority="15">
+        <xpath expr="//link[@href='/web_editor/static/src/scss/bootstrap_overridden.scss']" position="replace">
+          <link rel='stylesheet' type="text/less" href='/kicker/static/src/scss/variables.scss'/>
+        </xpath>
 </template>
 
 <template id="layout" name="Web layout">&lt;!DOCTYPE html&gt;
@@ -67,7 +73,7 @@ App Pages Templates
     </t>
     <!-- Close Sidebar Button -->
     <div class="row" id="top-header">
-        <div class="col-md-8 col-lg-10">
+        <div class="col-8 col-lg-10">
             <span id="burger-toggle" class="d-block d-md-none">
                 <i class="fa fa-bars"/>
             </span>
@@ -75,8 +81,8 @@ App Pages Templates
                 Awesome Logo
             </span>
         </div>
-        <div class="col-md-4 col-lg-2 o_kicker_status o_status_free">
-            <strong>&#183;&#160;&#160;Free</strong>
+        <div class="col-4 col-lg-2 o_kicker_status o_status_free">
+            <strong>Free</strong>
         </div>
     </div>
 
@@ -84,19 +90,27 @@ App Pages Templates
 
       <!-- Sidebar Header -->
       <div class="sidebar-header">
-        <img src="/kicker/avatar" class="img-circle o_kicker_profile_image"/>
-        <h3 t-field="user.name"/>
-        <h6>You suck at this. Please stop.</h6>
+        <img src="/kicker/avatar" class="rounded-circle o_kicker_profile_image"/>
+        <h5 class="text-primary"><strong>Hello <span t-field="user.name"/>,</strong></h5>
+        <h6 class="text-muted">Please note that you suck at this.</h6>
       </div>
+      <div class="gradient-border"/>
 
       <!-- Sidebar Links -->
-      <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link" href="/kicker/dashboard" data-router="true">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="/kicker/profile" data-router="true">Profile</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Stats</a></li>
-        <li class="nav-item"><a class="nav-link" href="/kicker/community" data-router="true">Community</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Log Out</a></li>
+      <ul id="main-nav" class="nav flex-column">
+        <li class="nav-item"><a class="nav-link text-primary" href="/app/dashboard" data-router="true">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-primary" href="/app/profile" data-router="true">Profile</a></li>
+        <li class="nav-item"><a class="nav-link text-primary" href="#">Stats</a></li>
+        <li class="nav-item"><a class="nav-link text-primary" href="/app/community" data-router="true">Community</a></li>
       </ul>
+      <div id="small-nav">
+        <hr/>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link text-primary" href="/app/about" data-router="true">About</a></li>
+          <li class="nav-item"><a class="nav-link text-primary" href="/web/session/logout">Log Out</a></li>
+        </ul>
+      </div>
+
     </nav>
 
     <div class="overlay"/>
@@ -111,7 +125,6 @@ App Pages Templates
         </div>
       </div>
     </div>
-    <a href="/kicker/score" class="fab bg-primary" data-router="true">+</a>
     <div class="offline-toast hidden">
         You are currently off-line.
         <btn class="btn btn-default"
@@ -125,7 +138,7 @@ App Pages Templates
 <template id="service_worker" name="Kicker ServiceWorker JS">
     var CACHE_NAME = 'kicker-cache-v5';
     var urlsToCache = [
-    '/kicker/app',
+    '/app',
     <t t-foreach="urls" t-as="url">
         '<t t-esc="url"/>',
     </t>
