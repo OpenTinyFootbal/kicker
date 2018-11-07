@@ -16,6 +16,10 @@ body {
     flex-direction: column;
 }
 
+.rounded-btn {
+  border-radius: 50px;
+}
+
 .o_kicker_bg {
     background-repeat:no-repeat;
     background-size: cover;
@@ -269,5 +273,18 @@ $rand: random(5);
     height:4px; 
     background:linear-gradient(0.25turn,$brand-primary, $brand-primary-dark);
     position:absolute; 
+  }
+}
+
+
+// INPUTS
+.input-ul {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $primary;
+  &:focus {
+    outline: none;    
+    box-shadow: none;
+    background-color: transparent;
   }
 }
