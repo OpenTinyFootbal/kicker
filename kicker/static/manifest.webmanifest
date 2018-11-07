@@ -1,7 +1,7 @@
 {
   "name": "kickr.io",
   "short_name": "kickr",
-  "start_url": "/kicker/app",
+  "start_url": "/app",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#875a7b",
