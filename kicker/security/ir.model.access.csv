@@ -3,3 +3,9 @@ access_kicker_kicker_user,kicker.kicker.user,model_kicker_kicker,base.group_user
 access_kicker_kicker_manager,kicker.kicker.manager,model_kicker_kicker,kicker.group_kicker_manager,1,1,1,1
 access_kicker_ping_user,kicker.ping.user,model_kicker_ping,base.group_user,1,0,0,0
 access_kicker_ping_manager,kicker.ping.manager,model_kicker_ping,kicker.group_kicker_manager,1,1,1,1
+access_kicker_team_user,kicker.team.user,model_kicker_team,base.group_user,1,0,0,0
+access_kicker_team_manager,kicker.team.manager,model_kicker_team,kicker.group_kicker_manager,1,1,1,1
+access_kicker_team_score_user,kicker.team.score.user,model_kicker_team_score,base.group_user,1,0,0,0
+access_kicker_team_score_manager,kicker.team.score.manager,model_kicker_team_score,kicker.group_kicker_manager,1,1,1,1
+access_kicker_game_user,kicker.game.user,model_kicker_game,base.group_user,1,0,0,0
+access_kicker_game_manager,kicker.game.manager,model_kicker_game,kicker.group_kicker_manager,1,1,1,1
