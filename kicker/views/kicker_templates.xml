@@ -46,6 +46,55 @@
 </template>
 
 <!--
+Login Restyling
+-->
+<template id="login" name="Login" inherit_id='web.login'>
+  <xpath expr="//form//div" position="before">
+    <h3 class="text-center text-primary"><strong>Hello.</strong></h3>
+  </xpath>
+  <xpath expr="//label[@for='login']" position="replace"/>
+  <xpath expr="//input[@name='login']" position="replace">
+    <input type="text" placeholder="Username" name="login" t-att-value="login" id="login" class="form-control input-ul rounded-0" required="required" autofocus="autofocus" autocapitalize="off"/>
+  </xpath>
+  <xpath expr="//label[@for='password']" position="replace"/>
+  <xpath expr="//input[@name='password']" position="replace">
+    <t t-call="kicker.password_field_reveal"/>
+  </xpath>
+  <xpath expr="//button[@type='submit']" position="attributes">
+    <attribute name="class">btn btn-primary btn-block rounded-btn</attribute>
+  </xpath>
+</template>
+
+<!-- Reveal password field (button to see the password). The only param is name (the nname attribute of the field)-->
+<template id="password_field_reveal" name="Password Field Reveal (can show and hide the password)">
+  <div class="odoo-password-reveal input-group">
+    <input type="password" placeholder="Password" name="password" id="password" class="form-control input-ul rounded-0" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
+    <button class="btn btn-link input-ul rounded-0" type="button">
+      <i class="fa fa-eye"></i>
+    </button>
+  </div>
+  <!-- Js for the password reveal field -->
+  <script type="text/javascript">
+    $(function() {
+      $('.odoo-password-reveal button').click(function(){
+          if($(".odoo-password-reveal input").attr('type') === 'password'){
+              $(".odoo-password-reveal input").replaceWith($('.odoo-password-reveal input').clone().attr('type', 'text'));
+              $('.odoo-password-reveal button i').removeClass().addClass('fa fa-eye-slash');
+          }else{
+              $(".odoo-password-reveal input").replaceWith($('.odoo-password-reveal input').clone().attr('type', 'password'));
+              $('.odoo-password-reveal button i').removeClass().addClass('fa fa-eye');
+          }
+      });
+    });
+  </script>
+</template>
+
+<!-- disable enterprise login override -->
+<record model="ir.ui.view" id="web_enterprise.webclient_login">
+  <field name="active" eval="False"/>
+</record>
+
+<!--
 App Pages Templates
 -->
 <template id="page_is_free" name="Is the Kicker Free?">
