@@ -9,7 +9,6 @@
     <link rel='stylesheet' type="text/less" href='/kicker/static/src/scss/kicker.scss'/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700" rel="stylesheet"/>
     <script type="text/javascript" src="/kicker/static/lib/Chart.bundle.min.js"/>
-    <script type="text/javascript" src="/bus/static/src/js/bus.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/router.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/kicker.js"/>
     <script type="text/javascript" src="/kicker/static/lib/jquery.mobile.custom.min.js"/>
