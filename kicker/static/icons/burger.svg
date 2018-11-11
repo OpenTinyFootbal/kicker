@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #161e6d;
+      }
+    </style>
+  </defs>
+  <path id="Union_1" data-name="Union 1" class="cls-1" d="M-888,22a2,2,0,0,1-2-2,2,2,0,0,1,2-2h20a2,2,0,0,1,2,2,2,2,0,0,1-2,2Zm0-9a2,2,0,0,1-2-2,2,2,0,0,1,2-2h20a2,2,0,0,1,2,2,2,2,0,0,1-2,2Zm0-9a2,2,0,0,1-2-2,2,2,0,0,1,2-2h20a2,2,0,0,1,2,2,2,2,0,0,1-2,2Z" transform="translate(890)"/>
+</svg>

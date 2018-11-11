@@ -131,7 +131,7 @@
                 <div class="text-right mb8 mt8">
                     <div class="btn btn-xs btn-disabled">Update Profile <i class="fa fa-pencil"/></div>
                 </div>
-                <img src="/kicker/static/img/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
+                <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
                 <h3>Loading...</h3>
                 <h6>This will only take a moment.</h6>
             </div>
@@ -187,7 +187,7 @@
                         </t>
                         <p>
                             <img t-if="player" t-attf-src="/kicker/avatar/{{ player.id }}" class="rounded-circle" width="64px"/>
-                            <img t-else="" src="/kicker/static/img/player.svg" class="rounded-circle" width="64px"/>
+                            <img t-else="" src="/kicker/static/icons/player.svg" class="rounded-circle" width="64px"/>
                         </p>
                         <p t-esc="player.name"/>
                         <small class="text-muted"><t t-esc="player.tagline || ''"/></small>
@@ -202,7 +202,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <p>
-                        <img src="/kicker/static/img/player.svg" class="rounded-circle avatar_placeholder" width="64px"/>
+                        <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder" width="64px"/>
                     </p>
                     <p>Loading...</p>
                     <small class="text-muted">Just a sec</small>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.5 28.4">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #161e6d;
+      }
+    </style>
+  </defs>
+  <g id="noun_Camera_2018238" transform="translate(255.5 133)">
+    <g id="_1" data-name="1" transform="translate(-255.5 -138)">
+      <path id="Tracé_9" data-name="Tracé 9" class="cls-1" d="M37.1,31.775A5.325,5.325,0,1,1,31.775,37.1,5.325,5.325,0,0,1,37.1,31.775ZM37.1,30a7.1,7.1,0,1,0,7.1,7.1A7.1,7.1,0,0,0,37.1,30Z" transform="translate(-19.35 -16.125)"/>
+      <path id="Tracé_10" data-name="Tracé 10" class="cls-1" d="M21.978,6.775l1.284,2.569.491.981h9.972v21.3H1.775v-21.3h9.972l.491-.981,1.284-2.569ZM23.075,5H12.425L10.65,8.55H1.775A1.775,1.775,0,0,0,0,10.325v21.3A1.775,1.775,0,0,0,1.775,33.4h31.95A1.775,1.775,0,0,0,35.5,31.625v-21.3A1.775,1.775,0,0,0,33.725,8.55H24.85Z"/>
+      <rect id="Rectangle_27" data-name="Rectangle 27" class="cls-1" width="5.325" height="1.775" transform="translate(26.625 12.1)"/>
+    </g>
+  </g>
+</svg>
