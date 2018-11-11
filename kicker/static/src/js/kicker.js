@@ -391,9 +391,9 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('load', function(event) {
   function updateOnlineStatus(event) {
     if (!navigator.onLine) {
-        document.querySelector('.offline-warning').style.display = 'block';
+        document.querySelector('.offline-warning').classList.remove('warning-hide');
     } else {        
-        document.querySelector('.offline-warning').style.display = 'none';
+        document.querySelector('.offline-warning').classList.add('warning-hide');
     }
   }
 

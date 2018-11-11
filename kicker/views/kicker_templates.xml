@@ -183,7 +183,7 @@ App Pages Templates
         </div>
       </div>
     </div>
-    <div class="offline-warning text-center">
+    <div class="offline-warning warning-hide text-center">
       <h3 class="text-primary">You're offline :(</h3>
       <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
       <p>At least it's pretty.</p>

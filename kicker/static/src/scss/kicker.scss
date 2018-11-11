@@ -225,7 +225,6 @@ $rand: random(5);
 }
 
 .offline-warning {
-    display: none;
     background-color: rgba(256,256,256,0.9);
     line-height: 3em;
     color: black;
@@ -234,8 +233,13 @@ $rand: random(5);
     height: 100vh;
     z-index: 1000;
     padding: 6rem 2rem 0 2rem;
+    transition: visibility 0.5s ease, opacity 0.5s ease;
     img {
       max-width: 75%;
+    }
+    &.warning-hide {
+      visibility: hidden;
+      opacity: 0;
     }
 }
 
