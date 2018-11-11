@@ -27,7 +27,7 @@
             <field name="email">est@odoo.com</field>
             <field name="kicker_player" eval="True"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
-            <field name="image" type="base64" file="kicker/static/img/elo.png"/>
+            <field name="image" type="base64" file="kicker/static/img/est.jpg"/>
         </record>
         
         <record id="mat" model="res.users">
@@ -37,7 +37,7 @@
             <field name="email">mat@odoo.com</field>
             <field name="kicker_player" eval="True"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
-            <field name="image" type="base64" file="kicker/static/img/mat.png"/>
+            <field name="image" type="base64" file="kicker/static/img/mat.jpg"/>
         </record>
 
         <record id="jem" model="res.users">
@@ -47,17 +47,7 @@
             <field name="email">jem@odoo.com</field>
             <field name="kicker_player" eval="True"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
-            <field name="image" type="base64" file="kicker/static/img/jem.png"/>
-        </record>
-
-        <record id="bst" model="res.users">
-            <field name="name">Benjamin</field>
-            <field name="login">bst</field>
-            <field name="password">bst</field>
-            <field name="email">bst@odoo.com</field>
-            <field name="kicker_player" eval="True"/>
-            <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
-            <field name="image" type="base64" file="kicker/static/img/bst.jpeg"/>
+            <field name="image" type="base64" file="kicker/static/img/jem.jpg"/>
         </record>
 
         <record id="dbo" model="res.users">
@@ -70,5 +60,28 @@
             <field name="image" type="base64" file="kicker/static/img/dbo.jpeg"/>
         </record>
 
+        <record id="dbe" model="res.users">
+            <field name="name">David</field>
+            <field name="login">dbe</field>
+            <field name="password">dbe</field>
+            <field name="email">dbe@odoo.com</field>
+            <field name="kicker_player" eval="True"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
+            <field name="image" type="base64" file="kicker/static/img/dbe.jpg"/>
+        </record>
+
+        <record id="whe" model="res.users">
+            <field name="name">William</field>
+            <field name="login">whe</field>
+            <field name="password">whe</field>
+            <field name="email">whe@odoo.com</field>
+            <field name="kicker_player" eval="True"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
+            <field name="image" type="base64" file="kicker/static/img/whe.jpg"/>
+        </record>
+
+        <record id="base.main_company" model="res.company">
+            <field name="logo" type="base64" file="kicker/static/icons/logo_colored.png"/>
+        </record>
     </data>
 </odoo>
