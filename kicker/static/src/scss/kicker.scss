@@ -89,7 +89,7 @@ $rand: random(5);
 .o_kicker_app {
     display: grid;
     grid-template-columns: 250px 1fr;
-    grid-template-rows: $navbar-height 1fr 0em;
+    grid-template-rows: $navbar-height 1fr 0;
     grid-template-areas: "sidebar topbar"
                          "sidebar main"
                          "toast toast";
@@ -330,6 +330,10 @@ $rand: random(5);
     left: 0;
     height: 50px;
     width: 100%;
+    @media (min-width: map-get($grid-breakpoints, 'md')) {
+      left: 250px;
+      width: calc(100% - 250px);
+    }
     line-height: 50px;
     color: white;
     text-transform: uppercase;
