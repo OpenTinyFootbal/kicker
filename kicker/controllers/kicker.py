@@ -11,12 +11,12 @@ from odoo import api, http
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.modules import get_module_resource
-from odoo.addons.web.controllers.main import binary_content
+from odoo.addons.web.controllers.main import binary_content, Home
 
 _logger = logging.getLogger(__name__)
 
 
-class KickerController(http.Controller):
+class KickerController(Home):
 
     NUM_BG = 10
 
@@ -179,4 +179,20 @@ class KickerController(http.Controller):
             'Content-Type': 'text/javascript',
         }
         response = http.request.make_response(js, headers=headers)
+        return response
+
+    # ------------------------------------------------------
+    # Login - overwrite of the web login so that regular users are redirected to the backend
+    # while portal users are redirected to the kicker app
+    # ------------------------------------------------------
+
+    @http.route(auth="public")
+    def web_login(self, redirect=None, *args, **kw):
+        response = super(KickerController, self).web_login(redirect=redirect, *args, **kw)
+        if not redirect and request.params['login_success']:
+            if request.env['res.users'].browse(request.uid).has_group('base.group_user'):
+                redirect = b'/web?' + request.httprequest.query_string
+            else:
+                redirect = '/app'
+            return http.redirect_with_hash(redirect)
         return response
