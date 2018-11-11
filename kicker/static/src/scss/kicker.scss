@@ -288,3 +288,41 @@ $rand: random(5);
     background-color: transparent;
   }
 }
+
+// LOGIN
+.login-shape-top {
+  background: linear-gradient(180deg, #dc4c17 0%, #dc4c17 35%, #fc812f 100%);
+  width: 150%;
+  height: 600px;
+  position: relative;
+  top: 0;
+  border-radius: 100%;
+  margin-top: -400px;
+  left: -25%;
+
+  img {
+    position: absolute;
+    bottom: 20px;
+  }
+
+  .logo-subshape-top {
+    background: rgba(252,129,47,1);
+    width: 60%;
+    height: 240px;
+    position: absolute;
+    bottom: 130px;
+    right: -10%;
+    border-radius: 100%;
+  }
+}
+.login-shape-bottom {
+  background: linear-gradient(90deg, rgba(252,129,47,1) 0%, rgba(252,129,47,1) 45%, rgba(220,76,23,1) 100%);
+  width: 100%;
+  height: 240px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 100%;
+  margin-left: -40%;
+  margin-bottom: -150px;
+}

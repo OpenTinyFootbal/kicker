@@ -48,6 +48,19 @@
 <!--
 Login Restyling
 -->
+<template id="login_layout" name="Login Layout" inherit_id='web.login_layout'>
+  <xpath expr="//div[@class='card-body']/div" position="replace"/>
+  <xpath expr="//div[contains(@class,'container')]" position="before">
+    <div class="login-shape-top">
+      <div class="logo-subshape-top"/>
+      <img src="/kicker/static/icons/logo.svg"/>
+    </div>
+  </xpath>
+  <xpath expr="//div[contains(@class,'container')]" position="after">
+    <div class="login-shape-bottom"/>
+  </xpath>
+</template>
+
 <template id="login" name="Login" inherit_id='web.login'>
   <xpath expr="//form//div" position="before">
     <h3 class="text-center text-primary"><strong>Hello.</strong></h3>
@@ -70,7 +83,7 @@ Login Restyling
   <div class="odoo-password-reveal input-group">
     <input type="password" placeholder="Password" name="password" id="password" class="form-control input-ul rounded-0" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
     <button class="btn btn-link input-ul rounded-0" type="button">
-      <i class="fa fa-eye"></i>
+      <img src="/kicker/static/icons/eye.svg" width="14px"/>
     </button>
   </div>
   <!-- Js for the password reveal field -->
@@ -79,10 +92,8 @@ Login Restyling
       $('.odoo-password-reveal button').click(function(){
           if($(".odoo-password-reveal input").attr('type') === 'password'){
               $(".odoo-password-reveal input").replaceWith($('.odoo-password-reveal input').clone().attr('type', 'text'));
-              $('.odoo-password-reveal button i').removeClass().addClass('fa fa-eye-slash');
           }else{
               $(".odoo-password-reveal input").replaceWith($('.odoo-password-reveal input').clone().attr('type', 'password'));
-              $('.odoo-password-reveal button i').removeClass().addClass('fa fa-eye');
           }
       });
     });
@@ -124,7 +135,7 @@ App Pages Templates
     <div class="row" id="top-header">
         <div class="col-8 col-lg-10">
             <span id="burger-toggle" class="d-block d-md-none">
-                <i class="fa fa-bars"/>
+                <img src="/kicker/static/icons/burger.svg" width="14px"/>
             </span>
             <span id="logo">
                 Awesome Logo
