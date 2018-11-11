@@ -26,6 +26,8 @@
             <field name="password">est</field>
             <field name="email">est@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">The Queen of Sarcasm will see you now</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/est.jpg"/>
         </record>
@@ -36,6 +38,8 @@
             <field name="password">mat</field>
             <field name="email">mat@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">My best move: not moving!</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/mat.jpg"/>
         </record>
@@ -46,6 +50,8 @@
             <field name="password">jem</field>
             <field name="email">jem@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">I do all the legwork</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/jem.jpg"/>
         </record>
@@ -56,6 +62,8 @@
             <field name="password">dbo</field>
             <field name="email">dbo@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">Death to all platypuses!</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/dbo.jpeg"/>
         </record>
@@ -66,6 +74,8 @@
             <field name="password">dbe</field>
             <field name="email">dbe@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">Shoot to score</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/dbe.jpg"/>
         </record>
@@ -76,6 +86,8 @@
             <field name="password">whe</field>
             <field name="email">whe@odoo.com</field>
             <field name="kicker_player" eval="True"/>
+            <field name="tagline">Don't pay attention to my relaxed attitude, I'll kick your ass anyway</field>
+            <field name="main_kicker_id" ref="kicker_gr_south"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/whe.jpg"/>
         </record>
