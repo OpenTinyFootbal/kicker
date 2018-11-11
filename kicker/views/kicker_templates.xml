@@ -137,9 +137,6 @@ App Pages Templates
             <span id="burger-toggle" class="d-block d-md-none">
                 <img src="/kicker/static/icons/burger.svg" width="14px"/>
             </span>
-            <span id="logo">
-                Awesome Logo
-            </span>
         </div>
         <div class="col-4 col-lg-2 o_kicker_status o_status_free">
             <strong>Free</strong>

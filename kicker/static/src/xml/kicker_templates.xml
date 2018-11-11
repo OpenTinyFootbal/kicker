@@ -1,29 +1,24 @@
 <templates id="template" xml:space="preserve">
     <!-- Pages -->
     <t t-name="Dashboard">
-        <div class="container-fluid o_kicker_main">
+        <div class="container-fluid o_kicker_main o_kicker_dashboard">
             <h5 class="text-primary"><strong>Hello <t t-esc="widget.name || 'darling'"/>,</strong></h5>
             <h6 class="text-muted">Please note that you suck at this.</h6>
             <div class="row">
                 <div class="col-md-12 col-lg-6">
-                    <div class="o_score_card card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6 gradient-border">
-                                    <h4 class="text-primary"><strong><t t-esc="widget.wins !== undefined ? widget.wins:'--'"/></strong></h4>
-                                    <h6 class="text-muted">won matches</h6>
-                                </div>
-                                <div class="col-6 gradient-border">
-                                    <h4 class="text-primary"><strong><t t-esc="widget.losses !== undefined ? widget.losses:'--'"/></strong></h4>
-                                    <h6 class="text-muted">lost matches</h6>
-                                </div>
+                    <div class="o_score_card">
+                        <div class="row">
+                            <div class="col-6 gradient-border">
+                                <h4 class="text-primary"><strong><t t-esc="widget.wins !== undefined ? widget.wins:'--'"/></strong></h4>
+                                <h6 class="text-muted">won matches</h6>
+                            </div>
+                            <div class="col-6 gradient-border">
+                                <h4 class="text-primary"><strong><t t-esc="widget.losses !== undefined ? widget.losses:'--'"/></strong></h4>
+                                <h6 class="text-muted">lost matches</h6>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="/app/score" data-router="true" class="btn btn-outline-primary btn-lg btn-block">Add Score</a>
-                        </div>
                     </div>
-                    <label>Your Stats</label>
+                    <h5 class="text-primary mt16"><strong>Your Statistics</strong></h5>
                     <div class="card">
                         <div class="card-body">
                             <canvas id="o_kicker_main_chart" width="400" height="400"></canvas>
@@ -31,7 +26,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
-                    <label>Your Best Teammates</label>
+                    <h5 class="text-primary mt16"><strong>Your Best Teammates</strong></h5>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
                             <t t-if="widget.teammates">
@@ -46,7 +41,7 @@
                             </t>
                         </div>
                     </div>
-                    <label>Your Worst Nightmares</label>
+                    <h5 class="text-primary mt16"><strong>Your Worst Nigthmares</strong></h5>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
                             <t t-if="widget.nightmares">
@@ -63,22 +58,26 @@
                     </div>
                 </div>
             </div>
+            <div class="btn-fixed-container">
+                <a href="/app/score" data-router="true" class="btn btn-primary btn-block btn-fixed">Add Score</a>
+            </div>
         </div>
     </t>
 
     <t t-name="Profile">
-        <div class="container-fluid o_kicker_main">
-            <div t-if="widget.player &amp;&amp; !widget.edit" class="text-center">
+        <div class="container-fluid o_kicker_main o_kicker_profile">
+            <div class="o_kicker_profile_backdrop"/>
+            <div t-if="widget.player &amp;&amp; !widget.edit" class="text-center o_kicker_profile_content">
                 <div class="text-right mb8 mt8">
-                    <button class="btn btn-xs o_kicker_edit">Update Profile <i class="fa fa-pencil"/></button>
+                    <button class="btn btn-sm btn-link o_kicker_edit">Edit <i class="fa fa-edit"/></button>
                 </div>
                 <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="rounded-circle o_kicker_profile_img"/>
-                <h3><t t-esc="widget.player.name"/></h3>
+                <h3 class="text-primary"><strong t-esc="widget.player.name"/></h3>
                 <t t-if="widget.player.tagline">
-                    <h5><t t-esc="widget.player.tagline"/></h5>
+                    <p><t t-esc="widget.player.tagline"/></p>
                 </t>
                 <t t-else="0">
-                    <h5 class="text-muted">You haven't set a tagline yet.</h5>
+                    <p class="text-muted">You haven't defined a tagline yet</p>
                 </t>
                 <t t-if="widget.player.main_kicker_id">
                     <h5>You mainly play at <b t-esc="widget.player.main_kicker_id[1]"/></h5>
@@ -88,15 +87,16 @@
                 </t>
                 <h6>You suck at this. Please stop.</h6>
             </div>
-            <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right">
+            <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right o_kicker_profile_content">
                 <div class="text-right mb8 mt8">
-                    <button class="btn o_kicker_save"><i class="fa fa-check"/> Save changes</button>
+                    <button class="btn btn-sm btn-link o_kicker_edit">Cancel <i class="fa fa-times"/></button>
                 </div>
                 <input type="file" class="d-none o_kicker_file_upload" name="avatar_file" accept="image/*"/>
                 <div class="mb16 text-center">
-                    <img class="rounded-circle mb16 o_kicker_profile_img" t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}"/><br/>
-                    <button class="btn btn-primary o_kicker_profile_img_select">Select Image</button>
-                    <button class="btn btn-danger o_kicker_profile_img_reset">Reset</button>
+                    <div class="img-edit">
+                        <img class="rounded-circle mb16 o_kicker_profile_img" t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}"/><br/>
+                        <div class="img-edit-icon rounded-circle o_kicker_profile_img_select"><i class="fa fa-camera fa-3x"/></div>
+                    </div>
                 </div>
                 <div class="form-group row">
                     <label class="control-label col-3" for="name">Name</label>
@@ -126,11 +126,35 @@
                         </select>
                     </div>
                 </div>
+                <div class="btn-fixed-container">
+                    <button class="btn btn-primary btn-block btn-fixed o_kicker_save">Save</button>
+                </div>
             </form>
             <div t-else="" class="text-center">
                 <div class="text-right mb8 mt8">
-                    <div class="btn btn-xs btn-disabled">Update Profile <i class="fa fa-pencil"/></div>
+                    <div class="btn btn-xs btn-disabled">Edit <i class="fa fa-edit"/></div>
                 </div>
+                <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
+                <h3>Loading...</h3>
+                <h6>This will only take a moment.</h6>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="CommunityProfile">
+        <div class="container-fluid o_kicker_main o_kicker_profile">
+            <div class="o_kicker_profile_backdrop"/>
+            <div t-if="widget.player" class="text-center o_kicker_profile_content">
+                <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="rounded-circle o_kicker_profile_img"/>
+                <h3 class="text-primary"><strong t-esc="widget.player.name"/></h3>
+                <t t-if="widget.player.tagline">
+                    <p><t t-esc="widget.player.tagline"/></p>
+                </t>
+                <t t-if="widget.player.main_kicker_id">
+                    <h5>Mainly plays at <b t-esc="widget.player.main_kicker_id[1]"/></h5>
+                </t>
+            </div>
+            <div t-else="" class="text-center">
                 <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
                 <h3>Loading...</h3>
                 <h6>This will only take a moment.</h6>
@@ -140,7 +164,7 @@
 
     <t t-name="Community">
         <div class="container-fluid o_kicker_main">
-            <h4>Community</h4>
+            <h5 class="text-primary"><strong>Community</strong></h5>
             <label>You played often with</label>
             <div class="container-fluid">
                 <div class="row">
@@ -148,12 +172,12 @@
                         <t t-foreach="widget.usual" t-as="player">
                             <t t-call="PlayerCard">
                                 <t t-set="player.fav" t-value="player.name.indexOf('e') !== -1"/>
-                                <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
+                                <t t-set="card_class" t-value="'col-3 col-lg-2'"/>
                             </t>
                         </t>
                     </t>
                     <t t-else="" t-call="PlayerCardLoader">
-                        <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
+                        <t t-set="card_class" t-value="'col-3 col-lg-2'"/>
                     </t>
                 </div>
             </div>
@@ -164,12 +188,12 @@
                         <t t-foreach="widget.rare" t-as="player">
                             <t t-call="PlayerCard">
                                 <t t-set="player.fav" t-value="player.name.indexOf('e') !== -1"/>
-                                <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
+                                <t t-set="card_class" t-value="'col-3 col-lg-2'"/>
                             </t>
                         </t>
                     </t>
                     <t t-else="" t-call="PlayerCardLoader">
-                        <t t-set="card_class" t-value="'col-md-6 col-lg-3 col-xl-2'"/>
+                        <t t-set="card_class" t-value="'col-3 col-lg-2'"/>
                     </t>
                 </div>
             </div>
@@ -179,20 +203,15 @@
     <!--  Components -->
     <t t-name="PlayerCard">
         <div t-attf-class="{{ card_class }}">
-            <div class="card text-center">
-                <div class="card-body">
-                    <a t-attf-href="/app/community/player/{{ player.id }}" data-router="true" class="o_kicker_user_link">
-                        <t t-if="player.hasOwnProperty('fav')">
-                            <i t-attf-class="o_kicker_user_fav fa {{ player.fav ? 'fa-heart':'fa-heart-o'}}"/>
-                        </t>
-                        <p>
-                            <img t-if="player" t-attf-src="/kicker/avatar/{{ player.id }}" class="rounded-circle" width="64px"/>
-                            <img t-else="" src="/kicker/static/icons/player.svg" class="rounded-circle" width="64px"/>
-                        </p>
-                        <p t-esc="player.name"/>
-                        <small class="text-muted"><t t-esc="player.tagline || ''"/></small>
-                    </a>
-                </div>
+            <div class="text-center">
+                <a t-attf-href="/app/community/player/{{ player.id }}" data-router="true" class="o_kicker_user_link">
+                    
+                    <p>
+                        <img t-if="player" t-attf-src="/kicker/avatar/{{ player.id }}" class="rounded-circle" width="40px"/>
+                        <img t-else="" src="/kicker/static/icons/player.svg" class="rounded-circle" width="40px"/>
+                    </p>
+                    <p class="text-muted" t-esc="player.name"/>
+                </a>
             </div>
         </div>
     </t>

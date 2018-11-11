@@ -65,7 +65,7 @@ var Profile = Widget.extend({
     template: 'Profile',
     xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
     events: {
-        'click .o_kicker_edit': '_onEdit',
+        'click .o_kicker_edit': '_toggleEdit',
         'click .o_kicker_save': '_onSave',
         'click .o_kicker_profile_img_select': '_onSelectImg',
         'click .o_kicker_profile_img_reset': '_onResetImg',
@@ -74,6 +74,7 @@ var Profile = Widget.extend({
     init: function (parents, options) {
         this._super.apply(this, arguments);
         this.player = undefined;
+        this.editable = true;
         this.edit = false;
     },
     start: function() {
@@ -94,8 +95,8 @@ var Profile = Widget.extend({
             self.renderElement();
         });
     },
-    _onEdit: function (e) {
-        this.edit = true;
+    _toggleEdit: function (e) {
+        this.edit = !this.edit;
         this.renderElement();   
     },
     _onSave: function (ev) {
@@ -120,6 +121,7 @@ var Profile = Widget.extend({
         var $form = $(ev.target).closest('form');        
         var formArray = $form.serializeArray();
         var params = {};
+        ev.preventDefault();
         for (var i = 0; i < formArray.length; i++){
             params[formArray[i]['name']] = formArray[i]['value'];
         }
@@ -148,6 +150,7 @@ var Profile = Widget.extend({
     _onSelectImg: function (ev) {
         ev.preventDefault();
         $(ev.target).closest('form').find('.o_kicker_file_upload').trigger('click');
+        $(ev.target).closest('form').find('.o_kicker_profile_img_select').addClass('o_kicker_profile_img_reset').removeClass('o_kicker_profile_img_select');
     },
     _onImgChange: function (ev) {
         if (ev.target.files.length) {
@@ -166,6 +169,7 @@ var Profile = Widget.extend({
         var $form = $(ev.target).closest('form');
         var $img = $form.find('.o_kicker_profile_img');
         $form.find('.o_kicker_profile_img').attr("src", $img.attr('data-init-src'));
+        $(ev.target).closest('form').find('.o_kicker_profile_img_reset').addClass('o_kicker_profile_img_select').removeClass('o_kicker_profile_img_reset');
     },
 });
 
@@ -239,12 +243,13 @@ var AddScore = Widget.extend({
 });
 
 var CommunityProfile = Widget.extend({
-    template: 'Profile',
+    template: 'CommunityProfile',
     xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
     init: function (parents, options) {
         this._super.apply(this, arguments);
         this.player_id = options.player_id;
         this.player = undefined;
+        this.editable = false ;
     },
     willStart: function() {
         var self = this;

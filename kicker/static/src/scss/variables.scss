@@ -19,7 +19,7 @@ $indigo:  #6610f2 !default;
 $purple:  #9B479F !default;
 $pink:    #e83e8c !default;
 $red:     #D9230F !default;
-$orange:  #FA7D2D !default;
+$orange:  #FC812F !default;
 $yellow:  #ffc107 !default;
 $green:   #469408 !default;
 $teal:    #20c997 !default;
@@ -33,10 +33,10 @@ $warning:       $purple !default;
 $danger:        $orange !default;
 $light:         $white !default;
 $dark:          $gray-800 !default;
-$bg-muted:    rgb(240,240,240);
+$bg-muted:    white;
 
 $brand-primary: $orange !default;
-$brand-primary-dark: rgb(220,76,23);
+$brand-primary-dark: #DC4C17;
 // Body
 
 $body-bg:                   #FCFCFC !default;

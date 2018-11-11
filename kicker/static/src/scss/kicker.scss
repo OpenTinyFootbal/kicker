@@ -245,16 +245,17 @@ $rand: random(5);
     flex-wrap: nowrap;
     overflow-x: auto;
       .o_kicker_user_card {
-        width: 150px;
+        width: 60px;
         margin-right: 15px;
         flex: 0 0 auto;
+        p {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       }
     }
-    .o_kicker_user_fav {
-      position: absolute;
-      top: 7px;
-      right: 22px;
-    }
+    
     .o_kicker_user_link {
       color: inherit;
       &:hover {
@@ -262,6 +263,48 @@ $rand: random(5);
       }
     }
 
+}
+
+.o_kicker_profile {
+  position: relative;
+
+  .o_kicker_profile_img {
+    width: 128px;
+    height: 128px;
+    border: 3px solid white;
+  }
+
+  .img-edit {
+    position: relative;
+
+    .img-edit-icon {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      width: 128px;
+      height: 128px;
+      position: absolute;
+      top: 0;
+      left: calc(50% - 64px);
+      line-height: 128px;
+      i {
+        line-height: 128px;
+      }
+    }
+  }
+
+  .o_kicker_profile_backdrop {
+    background: linear-gradient(0.25turn,$brand-primary, $brand-primary-dark);
+    border-top: 1px solid white;
+    width: 100%;
+    height: 22vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .o_kicker_profile_content {
+    position: relative;
+  }
 }
 
 .gradient-border {
@@ -276,6 +319,25 @@ $rand: random(5);
   }
 }
 
+.btn-fixed-container {
+  position: relative;
+  margin-top: 60px;
+
+  .btn-fixed {
+    background: $primary;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 10px 0px 20px 5px rgba(0,0,0,0.4);
+  }
+}
 
 // INPUTS
 .input-ul {
