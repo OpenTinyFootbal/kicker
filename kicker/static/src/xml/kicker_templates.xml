@@ -68,9 +68,7 @@
         <div class="container-fluid o_kicker_main o_kicker_profile">
             <div class="o_kicker_profile_backdrop"/>
             <div t-if="widget.player &amp;&amp; !widget.edit" class="text-center o_kicker_profile_content">
-                <div class="text-right mb8 mt8">
-                    <button class="btn btn-sm btn-link o_kicker_edit">Edit <i class="fa fa-edit"/></button>
-                </div>
+                <button class="btn btn-sm btn-link o_kicker_edit pull-right">Edit <i class="fa fa-edit"/></button>
                 <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="rounded-circle o_kicker_profile_img"/>
                 <h3 class="text-primary"><strong t-esc="widget.player.name"/></h3>
                 <t t-if="widget.player.tagline">
@@ -88,9 +86,7 @@
                 <h6>You suck at this. Please stop.</h6>
             </div>
             <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right o_kicker_profile_content">
-                <div class="text-right mb8 mt8">
-                    <button class="btn btn-sm btn-link o_kicker_edit">Cancel <i class="fa fa-times"/></button>
-                </div>
+                <button class="btn btn-sm btn-link o_kicker_edit pull-right">Cancel <i class="fa fa-times"/></button>
                 <input type="file" class="d-none o_kicker_file_upload" name="avatar_file" accept="image/*"/>
                 <div class="mb16 text-center">
                     <div class="img-edit">
@@ -131,9 +127,7 @@
                 </div>
             </form>
             <div t-else="" class="text-center">
-                <div class="text-right mb8 mt8">
-                    <div class="btn btn-xs btn-disabled">Edit <i class="fa fa-edit"/></div>
-                </div>
+                <div class="btn btn-xs btn-disabled pull-right o_kicker_edit">Edit <i class="fa fa-edit"/></div>
                 <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder" width="128px"/>
                 <h3>Loading...</h3>
                 <h6>This will only take a moment.</h6>
