@@ -5,7 +5,7 @@ var core = require('web.core');
 var time = require('web.time');
 var Widget = require('web.Widget');
 var local_storage = require('web.local_storage');
-var Router = require('demo.router');
+var Router = require('kicker.router');
 var rpc = require('web.rpc');
 var _t = core._t;
 
@@ -278,7 +278,7 @@ var App = Widget.extend({
   init: function (parent, options) {
       this._super.apply(this, arguments);
       var self = this;
-      Router.config({ mode: 'history'});
+      Router.config({mode: 'history'});
 
       // adding routes (most specific to less specific)
       Router

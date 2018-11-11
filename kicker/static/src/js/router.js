@@ -1,7 +1,7 @@
-/* Shamelessy taken form KRASIMIR TSONEV for the purpose of this demo
+/* Shamelessy taken form KRASIMIR TSONEV for the purpose of this app
 http://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url
 */
-odoo.define('demo.router', function (require) {
+odoo.define('kicker.router', function (require) {
 'use strict';
 
 var Router = {
