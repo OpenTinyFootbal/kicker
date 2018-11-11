@@ -183,22 +183,37 @@ App Pages Templates
         </div>
       </div>
     </div>
-    <div class="offline-toast hidden">
-        You are currently off-line.
-        <btn class="btn btn-default"
-             data-toggle="popover"
-             data-title="Working Off-line"
-             data-content="When off-line, you can only access cached data; posting results is disabled and some content may be out-of-date. Everything will work normally once you get back online.">So what?</btn>
+    <div class="offline-warning text-center">
+      <h3 class="text-primary">You're offline :(</h3>
+      <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
+      <p>At least it's pretty.</p>
+      <img src="/kicker/static/img/network.gif"/>
+      <p class="text-muted">Get back online and it'll go away by itself...</p>
     </div>
   </t>
 </template>
 
+<!--
+README
+
+This view contains the ServiceWorker used to cache most of the assets of the app locally
+on mobile browsers, allowing the app to 'work' offline (meaning, mostly, that it doesn't
+display a 'no connection' error, but that the app loads and says it can't work without a
+network connection).
+
+You might wonder why I've decided to put javascript in a view instead of in a javascript
+file, and that would be a valid question. The answer is that I needed to dynamically put
+the urls of the frontend and backend assets in the js code, which is impossible to do in
+a normal js files since assets change url at every 'compilation'; so a controller callls
+this view with the urls passed in the context and voilà!, you get a nice and dynamically
+allocated list of URLs. \o/
+-->
 <template id="service_worker" name="Kicker ServiceWorker JS">
     var CACHE_NAME = 'kicker-cache-v5';
     var urlsToCache = [
     '/app',
     <t t-foreach="urls" t-as="url">
-        '<t t-esc="url"/>',
+      '<t t-esc="url"/>',
     </t>
     ];
 

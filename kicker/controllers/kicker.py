@@ -165,7 +165,7 @@ class KickerController(Home):
         response.status = str(status)
         return response
 
-    @http.route('/kicker/sw.js', type='http', auth='public')
+    @http.route('/app/sw.js', type='http', auth='public')
     def serviceworker(self, **kw):
         bundles = ['web.assets_common', 'web.assets_frontend']
         attachments = request.env['ir.attachment']

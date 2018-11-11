@@ -89,10 +89,9 @@ $rand: random(5);
 .o_kicker_app {
     display: grid;
     grid-template-columns: 250px 1fr;
-    grid-template-rows: $navbar-height 1fr 0;
+    grid-template-rows: $navbar-height 1fr;
     grid-template-areas: "sidebar topbar"
-                         "sidebar main"
-                         "toast toast";
+                         "sidebar main";
     @media (max-width: map-get($grid-breakpoints, 'md')) {
         grid-template-columns: 0 100%;
     }
@@ -225,12 +224,19 @@ $rand: random(5);
   padding: 5em 0;
 }
 
-.offline-toast {
-    grid-area: toast;
-    background-color: rgb(50,50,50);
+.offline-warning {
+    display: none;
+    background-color: rgba(256,256,256,0.9);
     line-height: 3em;
-    color: white;
+    color: black;
     text-align: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    padding: 6rem 2rem 0 2rem;
+    img {
+      max-width: 75%;
+    }
 }
 
 .o_kicker_main {

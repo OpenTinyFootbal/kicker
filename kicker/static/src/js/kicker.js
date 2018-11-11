@@ -375,10 +375,10 @@ var app = new App();
 var el = $('.o_kicker_app');
 app.attachTo(el);
 
-/* // Register serviceworker if applicable
+// Register serviceworker if applicable
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/kicker/sw.js').then(function(registration) {
+    navigator.serviceWorker.register('/app/sw.js').then(function(registration) {
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function(err) {
@@ -391,15 +391,15 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('load', function(event) {
   function updateOnlineStatus(event) {
     if (!navigator.onLine) {
-        document.querySelector('.offline-toast').classList.remove('hidden');
+        document.querySelector('.offline-warning').style.display = 'block';
     } else {        
-        document.querySelector('.offline-toast').classList.add('hidden');
+        document.querySelector('.offline-warning').style.display = 'none';
     }
   }
 
   window.addEventListener('online',  updateOnlineStatus);
   window.addEventListener('offline', updateOnlineStatus);
 });
- */
+
 
 });
