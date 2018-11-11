@@ -118,6 +118,9 @@ var Profile = Widget.extend({
             return deferred.promise();
         }
         var self = this;
+        var $btn = $(ev.target);
+        $btn.prop('disabled', true);
+        $btn.prepend('<i class="fa fa-spin fa-circle-o-notch"/>&nbsp;')
         var $form = $(ev.target).closest('form');        
         var formArray = $form.serializeArray();
         var params = {};
