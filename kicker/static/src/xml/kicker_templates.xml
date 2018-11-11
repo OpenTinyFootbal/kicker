@@ -2,10 +2,10 @@
     <!-- Pages -->
     <t t-name="Dashboard">
         <div class="container-fluid o_kicker_main o_kicker_dashboard">
-            <h5 class="text-primary"><strong>Hello <t t-esc="widget.name || 'darling'"/>,</strong></h5>
-            <h6 class="text-muted">Please note that you suck at this.</h6>
             <div class="row">
                 <div class="col-md-12 col-lg-6">
+                    <h5 class="text-primary"><strong>Hello <t t-esc="widget.name || 'darling'"/>,</strong></h5>
+                    <h6 class="text-muted">Please note that you suck at this.</h6>
                     <div class="o_score_card">
                         <div class="row">
                             <div class="col-6 gradient-border">
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <h5 class="text-primary mt16"><strong>Your Statistics</strong></h5>
+                    <h5 class="text-primary"><strong>Your Statistics</strong></h5>
                     <div class="card">
                         <div class="card-body">
                             <canvas id="o_kicker_main_chart" width="400" height="400"></canvas>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
-                    <h5 class="text-primary mt16"><strong>Your Best Teammates</strong></h5>
+                    <h5 class="text-primary "><strong>Your Best Teammates</strong></h5>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
                             <t t-if="widget.teammates">
@@ -41,7 +41,7 @@
                             </t>
                         </div>
                     </div>
-                    <h5 class="text-primary mt16"><strong>Your Worst Nigthmares</strong></h5>
+                    <h5 class="text-primary"><strong>Your Worst Nigthmares</strong></h5>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
                             <t t-if="widget.nightmares">
@@ -83,9 +83,8 @@
                 <t t-else="0">
                     <h5 class="text-muted">You haven't set a favourite location yet.</h5>
                 </t>
-                <h6>You suck at this. Please stop.</h6>
             </div>
-            <form t-elif="widget.player &amp;&amp; widget.edit" class="text-right o_kicker_profile_content">
+            <form t-elif="widget.player &amp;&amp; widget.edit" class="justify-content-center o_kicker_profile_content">
                 <button class="btn btn-sm btn-link o_kicker_edit pull-right">Cancel <i class="fa fa-times"/></button>
                 <input type="file" class="d-none o_kicker_file_upload" name="avatar_file" accept="image/*"/>
                 <div class="mb16 text-center">
@@ -95,20 +94,17 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="control-label col-3" for="name">Name</label>
-                    <div class="col-9">
-                        <input type="text" class="form-control" name="name" placeholder="Destructor" t-att-value="widget.player.name"/>
+                    <div class="col-8 offset-2">
+                        <input type="text" class="form-control text-center" name="name" placeholder="DarkKnight69" t-att-value="widget.player.name"/>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="control-label col-3" for="Tagline">Tagline</label>
-                    <div class="col-9">
+                    <div class="col-8 offset-2">
                         <input type="text" class="form-control" name="tagline" placeholder="I will destroy you all!" t-att-value="widget.player.tagline or null"/>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="control-label col-3" for="main_kicker">Main Kicker</label>
-                    <div class="col-9">
+                    <div class="col-8 offset-2">
                         <select name="main_kicker" class="form-control">
                             <option value="-1">Select your default location...</option>
                             <t t-foreach="widget.kickers" t-as="kicker">

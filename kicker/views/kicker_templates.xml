@@ -48,11 +48,13 @@
 Login Restyling
 -->
 <template id="login_layout" name="Login Layout" inherit_id='web.login_layout'>
-  <xpath expr="//div[@class='card-body']/div" position="replace"/>
+  <xpath expr="//div[@class='card-body']/div" position="attributes">
+    <attribute name="t-attf-class">text-center pb-3 border-bottom {{'mb-3' if form_small else 'mb-4'}} d-none d-md-block</attribute>
+  </xpath>
   <xpath expr="//div[contains(@class,'container')]" position="before">
     <div class="login-shape-top">
       <div class="logo-subshape-top"/>
-      <img src="/kicker/static/icons/logo.svg"/>
+      <img class="d-block d-md-none" src="/kicker/static/icons/logo.svg"/>
     </div>
   </xpath>
   <xpath expr="//div[contains(@class,'container')]" position="after">
@@ -147,7 +149,7 @@ App Pages Templates
       <!-- Sidebar Header -->
       <div class="sidebar-header">
         <img src="/kicker/avatar" class="rounded-circle o_kicker_profile_image"/>
-        <h5 class="text-primary"><strong>Hello <span t-field="user.name"/>,</strong></h5>
+        <h5 class="text-primary"><strong>Hello <span class="user_name" t-field="user.name"/>,</strong></h5>
         <h6 class="text-muted">Please note that you suck at this.</h6>
       </div>
       <div class="gradient-border"/>

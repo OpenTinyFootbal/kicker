@@ -142,7 +142,7 @@ var Profile = Widget.extend({
                 self.edit = false;
                 self.player = result.player;
                 self.renderElement();
-                self.trigger_up('imageChange');
+                self.trigger_up('profileChange', {'player': result.player});
             }
             return result;
         }).fail(function (type, error) {
@@ -279,7 +279,7 @@ var App = Widget.extend({
     'click a[data-router]': '_onMenuClick',
   },
   custom_events: {
-      'imageChange': '_onImgChange',
+      'profileChange': '_onProfileChange',
   },
   pages: {
       dashboard: Dashboard,
@@ -362,9 +362,12 @@ var App = Widget.extend({
       }
       this._toggleMenu({}, 'close');
   },
-  _onImgChange: function () {
+  _onProfileChange: function (e) {
+    // small trick to refresh the avatar without refreshing the page: prevent
+    // getting if from cache by adding an arbitrary GET param
     var $img = this.$el.find('.o_kicker_profile_image');
     $img.attr('src', $img.attr('src') + '?t=' + new Date().getTime());
+    this.$el.find('.user_name').text(e.data.player.name);
   },
 });
 
