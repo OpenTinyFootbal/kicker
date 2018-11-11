@@ -20,11 +20,11 @@
         </record>
         
         <!-- users -->
-        <record id="elo" model="res.users">
+        <record id="est" model="res.users">
             <field name="name">Eloïse</field>
-            <field name="login">elo</field>
-            <field name="password">elo</field>
-            <field name="email">elo@odoo.com</field>
+            <field name="login">est</field>
+            <field name="password">est</field>
+            <field name="email">est@odoo.com</field>
             <field name="kicker_player" eval="True"/>
             <field name="groups_id" eval="[(6,0,[ref('base.group_portal')])]"/>
             <field name="image" type="base64" file="kicker/static/img/elo.png"/>
