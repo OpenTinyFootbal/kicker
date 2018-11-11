@@ -192,6 +192,11 @@ var Community = Widget.extend({
     },
 });
 
+var About = Widget.extend({
+    template: 'About',
+    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+});
+
 var AddScore = Widget.extend({
     template: 'AddScore',
     xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
@@ -277,6 +282,7 @@ var App = Widget.extend({
       dashboard: Dashboard,
       profile: Profile,
       community: Community,
+      about: About,
       communityProfile: CommunityProfile,
       score: AddScore,
   },
@@ -301,6 +307,9 @@ var App = Widget.extend({
       })
       .add(/score/, function() {
         self._switchPage('score');
+      })
+      .add(/about/, function() {
+        self._switchPage('about');
       })
       .add(function () {
           self._switchPage('dashboard');

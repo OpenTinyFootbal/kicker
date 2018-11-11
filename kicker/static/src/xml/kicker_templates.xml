@@ -200,6 +200,13 @@
         </div>
     </t>
 
+    <t t-name="About">
+        <div class="container-fluid o_kicker_main">
+            <h5 class="text-primary"><strong>About</strong></h5>
+            <p>Made with ❤️ in Grand-Rosière.</p>
+        </div>
+    </t>
+
     <!--  Components -->
     <t t-name="PlayerCard">
         <div t-attf-class="{{ card_class }}">
