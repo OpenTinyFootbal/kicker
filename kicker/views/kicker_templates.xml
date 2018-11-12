@@ -213,6 +213,7 @@ allocated list of URLs. \o/
     var CACHE_NAME = 'kicker-cache-v5';
     var urlsToCache = [
     '/app',
+    '/app/dashboard',
     <t t-foreach="urls" t-as="url">
       '<t t-esc="url"/>',
     </t>
