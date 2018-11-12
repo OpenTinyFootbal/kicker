@@ -149,7 +149,7 @@ App Pages Templates
 
       <!-- Sidebar Header -->
       <div class="sidebar-header">
-        <img src="/kicker/avatar" class="rounded-circle o_kicker_profile_image" alt="Your avatar for this site"/>
+        <img src="/app/avatar" class="rounded-circle o_kicker_profile_image" alt="Your avatar for this site"/>
         <h5 class="text-primary"><strong>Hello <span class="user_name" t-field="user.name"/>,</strong></h5>
         <h6 class="text-muted">Please note that you suck at this.</h6>
       </div>
@@ -184,13 +184,6 @@ App Pages Templates
         </div>
       </div>
     </div>
-    <div class="offline-warning warning-hide text-center">
-      <h3 class="text-primary">You're offline :(</h3>
-      <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
-      <p>At least it's pretty.</p>
-      <img src="/kicker/static/img/network.gif" alt="Screenshot of the Windows 98 Network Control Panel"/>
-      <p class="text-muted">Get back online and it'll go away by itself...</p>
-    </div>
   </t>
 </template>
 
@@ -210,10 +203,12 @@ this view with the urls passed in the context and voilà!, you get a nice and dy
 allocated list of URLs. \o/
 -->
 <template id="service_worker" name="Kicker ServiceWorker JS">
-    var CACHE_NAME = 'kicker-cache-v5';
+    var CACHE_NAME = 'kicker-cache-<t t-esc="version" />';
     var urlsToCache = [
     '/app',
     '/app/dashboard',
+    '/app/offline',
+    '/app/static/img/network.gif',
     <t t-foreach="urls" t-as="url">
       '<t t-esc="url"/>',
     </t>
@@ -279,8 +274,7 @@ allocated list of URLs. \o/
     shouldHandleFetch = function (event) {
         return (
             event.request.method.toLowerCase() === 'get'
-            &amp;&amp; (event.request.url.indexOf('google-analytics.com') === -1)
-            &amp;&amp; (event.request.url.indexOf('googleapis.com') === -1));
+            &amp;&amp; (event.request.url.indexOf('google-analytics.com') === -1));
     }
 
 

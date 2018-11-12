@@ -3,6 +3,7 @@ import base64
 import jinja2
 import logging
 import random
+import datetime
 from functools import reduce
 import werkzeug
 
@@ -14,6 +15,8 @@ from odoo.modules import get_module_resource
 from odoo.addons.web.controllers.main import binary_content, Home
 
 _logger = logging.getLogger(__name__)
+
+SERVER_START = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d-%H%M')
 
 
 class KickerController(Home):
@@ -70,7 +73,7 @@ class KickerController(Home):
     @http.route(['/app/static/<path:route>'], auth="none")
     def static(self, route, **kw):
         """Serve static files via the /app route for caching purposes (servicewsorker scope)"""
-        return werkzeug.utils.redirect('/kicker/static/'+route)
+        return werkzeug.utils.redirect('/kicker/static/' + route)
 
     # JSON routes
     @http.route('/app/json/dashboard', type='json', auth='user', csrf=False)
@@ -151,7 +154,7 @@ class KickerController(Home):
         return {'success': True, 'game_id': game.id}
 
     # Non-json routes
-    @http.route(['/kicker/avatar', '/kicker/avatar/<int:player_id>'], type='http', auth="public")
+    @http.route(['/app/avatar', '/app/avatar/<int:player_id>'], type='http', auth="public")
     def avatar(self, player_id=None, **kw):
         if not player_id:
             player_id = request.env.user.partner_id.id
@@ -179,7 +182,7 @@ class KickerController(Home):
                 ('url', '=like', '/web/content/%-%/{0}%'.format(bundle))
             ])
         urls = attachments.mapped('url')
-        js = request.env['ir.ui.view'].render_template('kicker.service_worker', values={'urls': urls})
+        js = request.env['ir.ui.view'].render_template('kicker.service_worker', values={'urls': urls, 'version': SERVER_START})
         headers = {
             'Content-Type': 'text/javascript',
         }

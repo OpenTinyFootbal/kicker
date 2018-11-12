@@ -129,6 +129,7 @@ $rand: random(5);
     }
     #main-nav {
       margin-top: 1em;
+      min-height: 220px;
       & > li {
         a {
           color: inherit;
@@ -224,31 +225,16 @@ $rand: random(5);
   padding: 5em 0;
 }
 
-.offline-warning {
-    background-color: rgba(256,256,256,0.9);
-    line-height: 3em;
-    color: black;
-    text-align: center;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-    padding: 6rem 2rem 0 2rem;
-    transition: visibility 0.5s ease, opacity 0.5s ease;
-    img {
-      max-width: 75%;
-    }
-    &.warning-hide {
-      visibility: hidden;
-      opacity: 0;
-    }
-}
-
 .o_kicker_main {
   grid-area: main;
   background-color: $bg-muted;
   overflow-y: auto;  /*adds scroll to this container*/
   width: 100%;
   padding: 1em;
+
+  img {
+    max-width: 100%;
+  }
   
   .o_kicker_user_row {
     display: flex;

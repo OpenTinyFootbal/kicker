@@ -200,6 +200,11 @@ var About = Widget.extend({
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
 });
 
+var Offline = Widget.extend({
+    template: 'Offline',
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+});
+
 var AddScore = Widget.extend({
     template: 'AddScore',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
@@ -286,6 +291,7 @@ var App = Widget.extend({
       profile: Profile,
       community: Community,
       about: About,
+      offline: Offline,
       communityProfile: CommunityProfile,
       score: AddScore,
   },
@@ -313,6 +319,9 @@ var App = Widget.extend({
       })
       .add(/about/, function() {
         self._switchPage('about');
+      })
+      .add(/offline/, function() {
+        self._switchPage('offline');
       })
       .add(function () {
           self._switchPage('dashboard');
@@ -350,6 +359,8 @@ var App = Widget.extend({
       if (link.length > 0) {
           
           var path = link[0].pathname;
+          if (!navigator.onLine)
+            path = '/app/offline';
           Router.navigate(path);
       }
       this._toggleMenu({}, 'close');
@@ -391,9 +402,9 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('load', function(event) {
   function updateOnlineStatus(event) {
     if (!navigator.onLine) {
-        document.querySelector('.offline-warning').classList.remove('warning-hide');
+        Router.navigate('/app/offline');
     } else {        
-        document.querySelector('.offline-warning').classList.add('warning-hide');
+        Router.navigate('/app/dashboard');
     }
   }
 
