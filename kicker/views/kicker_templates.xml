@@ -8,6 +8,7 @@
   <xpath expr="." position="inside">
     <link rel='stylesheet' type="text/less" href='/kicker/static/src/scss/kicker.scss'/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700" rel="stylesheet"/>
+    <link rel="preload" as="fetch" href="/app/static/src/xml/kicker_templates.xml"/>
     <script type="text/javascript" src="/kicker/static/lib/Chart.bundle.min.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/router.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/kicker.js"/>
@@ -54,7 +55,7 @@ Login Restyling
   <xpath expr="//div[hasclass('container')]" position="before">
     <div class="login-shape-top">
       <div class="logo-subshape-top"/>
-      <img class="d-block d-md-none" src="/kicker/static/icons/logo.svg"/>
+      <img class="d-block d-md-none" src="/kicker/static/icons/logo.svg" alt=""/>
     </div>
   </xpath>
   <xpath expr="//div[hasclass('container')]" position="after">
@@ -84,7 +85,7 @@ Login Restyling
   <div class="odoo-password-reveal input-group">
     <input type="password" placeholder="Password" name="password" id="password" class="form-control input-ul rounded-0" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
     <button class="btn btn-link input-ul rounded-0" type="button">
-      <img src="/kicker/static/icons/eye.svg" width="14px"/>
+      <img src="/kicker/static/icons/eye.svg" width="14px" alt=""/>
     </button>
   </div>
   <!-- Js for the password reveal field -->
@@ -130,13 +131,13 @@ App Pages Templates
   <t t-call="kicker.layout">
     <t t-set="head">
         <link rel="manifest" href="/kicker/static/manifest.webmanifest"/>
-        <meta name="theme-color" content="#875a7b"/>
+        <meta name="theme-color" content="#FC812F"/>
     </t>
     <!-- Close Sidebar Button -->
     <div class="row" id="top-header">
         <div class="col-8 col-lg-10">
             <span id="burger-toggle" class="d-block d-md-none">
-                <img src="/kicker/static/icons/burger.svg" width="14px"/>
+                <img src="/kicker/static/icons/burger.svg" width="14px" alt=""/>
             </span>
         </div>
         <div class="col-4 col-lg-2 o_kicker_status o_status_free">
@@ -148,7 +149,7 @@ App Pages Templates
 
       <!-- Sidebar Header -->
       <div class="sidebar-header">
-        <img src="/kicker/avatar" class="rounded-circle o_kicker_profile_image"/>
+        <img src="/kicker/avatar" class="rounded-circle o_kicker_profile_image" alt="Your avatar for this site"/>
         <h5 class="text-primary"><strong>Hello <span class="user_name" t-field="user.name"/>,</strong></h5>
         <h6 class="text-muted">Please note that you suck at this.</h6>
       </div>
@@ -187,7 +188,7 @@ App Pages Templates
       <h3 class="text-primary">You're offline :(</h3>
       <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
       <p>At least it's pretty.</p>
-      <img src="/kicker/static/img/network.gif"/>
+      <img src="/kicker/static/img/network.gif" alt="Screenshot of the Windows 98 Network Control Panel"/>
       <p class="text-muted">Get back online and it'll go away by itself...</p>
     </div>
   </t>
@@ -244,7 +245,7 @@ allocated list of URLs. \o/
       <h3 class="text-primary">You're offline :(</h3>
       <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
       <p>At least it's pretty.</p>
-      <img src="/kicker/static/img/network.gif"/>
+      <img src="/kicker/static/img/network.gif" alt="Screenshot of the Windows 98 Network Control Panel"/>
       <p class="text-muted">Get back online and it'll go away by itself...</p>
     </div>
     `, {
