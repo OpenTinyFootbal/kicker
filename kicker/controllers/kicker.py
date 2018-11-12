@@ -67,8 +67,13 @@ class KickerController(Home):
     def app(self, **kw):
         return request.render('kicker.app', {'body_classname': 'o_kicker_app', 'user': request.env.user})
 
+    @http.route(['/app/static/<path:route>'], auth="none")
+    def static(self, route, **kw):
+        """Serve static files via the /app route for caching purposes (servicewsorker scope)"""
+        return werkzeug.utils.redirect('/kicker/static/'+route)
+
     # JSON routes
-    @http.route('/kicker/json/dashboard', type='json', auth='user', csrf=False)
+    @http.route('/app/json/dashboard', type='json', auth='user', csrf=False)
     def dashboard(self, **kw):
         partner = request.env.user.partner_id
         teammates = partner.kicker_team_ids.mapped('player_ids') - partner
@@ -83,7 +88,7 @@ class KickerController(Home):
         }
         return data
 
-    @http.route('/kicker/json/community', type='json', auth='user', csrf=False)
+    @http.route('/app/json/community', type='json', auth='user', csrf=False)
     def community(self, **kw):
         partner = request.env.user.partner_id
         usual = partner.kicker_team_ids.mapped('player_ids') - partner
@@ -94,7 +99,7 @@ class KickerController(Home):
         }
         return demo_data
 
-    @http.route(['/kicker/json/player', '/kicker/json/player/<int:player_id>'], type='json', auth='user')
+    @http.route(['/app/json/player', '/app/json/player/<int:player_id>'], type='json', auth='user')
     def player_info(self, player_id=None, **kw):
         if not player_id:
             player_id = request.env.user.partner_id.id
@@ -103,7 +108,7 @@ class KickerController(Home):
             raise werkzeug.exceptions.NotFound()
         return partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]
     
-    @http.route('/kicker/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/app/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
     def update_profile(self, name, tagline, main_kicker, avatar=None, **kw):
         partner = request.env.user.partner_id
         vals = {
@@ -116,11 +121,11 @@ class KickerController(Home):
         partner.write(vals)
         return {'success': True, 'player':partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]}
 
-    @http.route(['/kicker/json/players'], type='json', auth='user')
+    @http.route(['/app/json/players'], type='json', auth='user')
     def list_players(self, **kw):
         return request.env['res.partner'].search_read([('kicker_player', '=', True)], fields=['id', 'name'])
 
-    @http.route(['/kicker/json/kickers'], type='json', auth='user')
+    @http.route(['/app/json/kickers'], type='json', auth='user')
     def list_kickers(self, **kw):
         kickers = request.env['kicker.kicker'].sudo().search_read([], fields=['id', 'nickname'])
         default = request.env.user.partner_id.main_kicker_id.id

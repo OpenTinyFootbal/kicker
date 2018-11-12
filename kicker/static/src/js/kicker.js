@@ -13,7 +13,7 @@ require('web.dom_ready');
 
 var Dashboard = Widget.extend({
     template: 'Dashboard',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     init: function () {
         this.chartData = {
             type: 'line',
@@ -40,7 +40,7 @@ var Dashboard = Widget.extend({
         var self = this;
         return $.when(
             rpc.query({
-                route: '/kicker/json/dashboard',
+                route: '/app/json/dashboard',
             }),
             this._super.apply(this, arguments)
         )
@@ -63,7 +63,7 @@ var Dashboard = Widget.extend({
 
 var Profile = Widget.extend({
     template: 'Profile',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     events: {
         'click .o_kicker_edit': '_toggleEdit',
         'click .o_kicker_save': '_onSave',
@@ -81,10 +81,10 @@ var Profile = Widget.extend({
         var self = this;
         return $.when(
             rpc.query({
-                route: '/kicker/json/player/'
+                route: '/app/json/player/'
             }),
             rpc.query({
-                route: '/kicker/json/kickers',
+                route: '/app/json/kickers',
             }),
             this._super.apply(this, arguments)
         )
@@ -132,7 +132,7 @@ var Profile = Widget.extend({
         return readFile(files[0], params)
         .then(function () {
             return rpc.query({
-            route: '/kicker/json/update_profile',
+            route: '/app/json/update_profile',
             params: params
         })})
         .then(function (result) {
@@ -178,12 +178,12 @@ var Profile = Widget.extend({
 
 var Community = Widget.extend({
     template: 'Community',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     start: function () {
         var self = this;
         return $.when(
             rpc.query({
-                route: '/kicker/json/community',
+                route: '/app/json/community',
             }),
             this._super.apply(this, arguments)
         )
@@ -197,12 +197,12 @@ var Community = Widget.extend({
 
 var About = Widget.extend({
     template: 'About',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
 });
 
 var AddScore = Widget.extend({
     template: 'AddScore',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     events: {
         'submit form.o_kicker_score': '_onSubmit',
     },
@@ -210,10 +210,10 @@ var AddScore = Widget.extend({
         var self = this;
         return $.when(
             rpc.query({
-                route: '/kicker/json/players',
+                route: '/app/json/players',
             }),
             rpc.query({
-                route: '/kicker/json/kickers',
+                route: '/app/json/kickers',
             }),
             this._super.apply(this, arguments)
         )
@@ -252,7 +252,7 @@ var AddScore = Widget.extend({
 
 var CommunityProfile = Widget.extend({
     template: 'CommunityProfile',
-    xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     init: function (parents, options) {
         this._super.apply(this, arguments);
         this.player_id = options.player_id;
@@ -262,7 +262,7 @@ var CommunityProfile = Widget.extend({
     willStart: function() {
         var self = this;
         return rpc.query({
-            route: '/kicker/json/player/' + this.player_id
+            route: '/app/json/player/' + this.player_id
         })
         .then(function (player_data) {
             self.player = player_data;
@@ -271,7 +271,7 @@ var CommunityProfile = Widget.extend({
 });
 
 var App = Widget.extend({
-  xmlDependencies: ['/kicker/static/src/xml/kicker_templates.xml'],
+  xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
   events: {
     'click #burger-toggle, .overlay': '_toggleMenu',
     "swipeleft .overlay, #sidebar, #top-header": function (ev) {this._toggleMenu(ev, 'close');},

@@ -135,7 +135,7 @@
         <div class="container-fluid o_kicker_main o_kicker_profile">
             <div class="o_kicker_profile_backdrop"/>
             <div t-if="widget.player" class="text-center o_kicker_profile_content">
-                <img t-attf-src="/kicker/avatar/{{ widget.player.id }}?t={{ new Date().getTime() }}" class="rounded-circle o_kicker_profile_img"/>
+                <img t-attf-src="/kicker/avatar/{{ widget.player.id }}" class="rounded-circle o_kicker_profile_img"/>
                 <h3 class="text-primary"><strong t-esc="widget.player.name"/></h3>
                 <t t-if="widget.player.tagline">
                     <p><t t-esc="widget.player.tagline"/></p>

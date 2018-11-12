@@ -239,7 +239,17 @@ allocated list of URLs. \o/
     }
 
     offlineResponse = function () {
-        return new Response('Sorry, the application is offline.')
+        return new Response(`
+        <div class="offline-warning text-center">
+      <h3 class="text-primary">You're offline :(</h3>
+      <p>Despite our best efforts, this app can only manage to display this nice warning instead of a shitty error message from your browser.</p>
+      <p>At least it's pretty.</p>
+      <img src="/kicker/static/img/network.gif"/>
+      <p class="text-muted">Get back online and it'll go away by itself...</p>
+    </div>
+    `, {
+        headers: {'Content-Type': 'text/html'}
+      })
     }
 
     respondFromCacheThenNetwork = function (event) {
