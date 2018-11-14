@@ -162,6 +162,11 @@ $rand: random(5);
     display: none;
     /* middle layer, i.e. appears below the sidebar */
     z-index: 90;
+
+    /* disable for bigger screens */
+    @media (min-width: map-get($grid-breakpoints, 'md')) {
+      visibility: hidden;
+    }
 }
 
 @keyframes colorchange
@@ -230,7 +235,7 @@ $rand: random(5);
   background-color: $bg-muted;
   overflow-y: auto;  /*adds scroll to this container*/
   width: 100%;
-  padding: 1em;
+  padding: 1em 15px;
 
   img {
     max-width: 100%;
