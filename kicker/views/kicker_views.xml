@@ -8,7 +8,7 @@
         <field name="model">kicker.kicker</field>
         <field name="arch" type="xml">
             <tree string="Kickers">
-                <field name="nickname"/>
+                <field name="name"/>
                 <field name="location"/>
                 <field name="is_available"/>
             </tree>
@@ -21,7 +21,7 @@
         <field name="arch" type="xml">
             <form string="Kicker">
                 <group>
-                    <h1><field name="nickname" placeholder="e.g. Kicker in G-R"/></h1>
+                    <h1><field name="name" placeholder="e.g. Kicker in G-R"/></h1>
                 </group>
                 <group>
                     <group>
@@ -83,60 +83,45 @@
         <field name="model">kicker.game</field>
         <field name="arch" type="xml">
             <form string="Kicker Game">
-                <group>
-                    <h1><field name="display_name"/></h1>
-                </group>
-                <group>
-                    <field name="kicker_id"/>
-                    <field name="score_ids">
-                        <tree editable="bottom">
-                            <field name="team_id"/>
-                            <field name="score"/>
-                        </tree>
-                    </field>
-                    <field name="winning_team_id"/>
-                    <field name="losing_team_id"/>
-                </group>
+                <sheet>
+                    <group>
+                        <h1><field name="display_name"/></h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="session_ids">
+                                <tree editable="bottom">
+                                    <field name="player_id"/>
+                                    <field name="team"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="kicker_id"/>
+                            <field name="score_1"/>
+                            <field name="score_2"/>
+                            <field name="winning_team"/>
+                        </group>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
 
     <!--
-        kicker.team Views
+        kicker.session Views
     -->
-    <record id="kicker_team_view_tree" model="ir.ui.view">
-        <field name="name">kicker.team.tree</field>
-        <field name="model">kicker.team</field>
+    <record id="kicker_session_view_tree" model="ir.ui.view">
+        <field name="name">kicker.session.tree</field>
+        <field name="model">kicker.session</field>
         <field name="arch" type="xml">
-            <tree string="Teams">
-                <field name="name"/>
-                <field name="nickname"/>
-                <field name="wins"/>
-                <field name="losses"/>
+            <tree string="Sessions">
+                <field name="player_id"/>
+                <field name="game_id"/>
+                <field name="team"/>
+                <field name="won"/>
             </tree>
-        </field>
-    </record>
-
-    <record id="kicker_team_view_form" model="ir.ui.view">
-        <field name="name">kicker.team.form</field>
-        <field name="model">kicker.team</field>
-        <field name="arch" type="xml">
-            <form string="Kicker Teams">
-                <group>
-                    <h1><field name="name"/></h1>
-                </group>
-                <group>
-                    <field name="player_ids" widget="many2many_tags"/>
-                    <field name="wins"/>
-                    <field name="losses"/>
-                    <field name="score_ids">
-                        <tree>
-                            <field name="game_id"/>
-                            <field name="score"/>
-                        </tree>
-                    </field>
-                </group>
-            </form>
         </field>
     </record>
 
@@ -160,7 +145,7 @@
                             <field name="wins"/>
                             <field name="losses"/>
                         </group>
-                        <field name="kicker_team_ids"/>
+                        <field name="kicker_session_ids"/>
                     </group>
                 </page>
             </xpath>
@@ -191,11 +176,11 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <record id="kicker_team_action_list" model="ir.actions.act_window">
-        <field name="name">Teams</field>
-        <field name="res_model">kicker.team</field>
+    <record id="kicker_session_action_list" model="ir.actions.act_window">
+        <field name="name">Sessions</field>
+        <field name="res_model">kicker.session</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree</field>
     </record>
 
     <record id="kicker_player_action_list" model="ir.actions.act_window">
@@ -241,10 +226,10 @@
         sequence="10"/>
     
     <menuitem
-        id="kicker_menu_team_list"
-        name="Teams"
+        id="kicker_menu_session_list"
+        name="Sessions"
         parent="kicker_menu_root"
-        action="kicker_team_action_list"
+        action="kicker_session_action_list"
         sequence="20"/>
     
     <menuitem

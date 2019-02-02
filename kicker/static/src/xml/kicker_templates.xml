@@ -109,10 +109,10 @@
                             <option value="-1">Select your default location...</option>
                             <t t-foreach="widget.kickers" t-as="kicker">
                                 <t t-if="kicker.id === widget.default_kicker">
-                                    <option t-att-value="kicker.id" selected="true"><t t-esc="kicker.nickname"/></option>
+                                    <option t-att-value="kicker.id" selected="true"><t t-esc="kicker.name"/></option>
                                 </t>
                                 <t t-else="0">
-                                    <option t-att-value="kicker.id"><t t-esc="kicker.nickname"/></option>
+                                    <option t-att-value="kicker.id"><t t-esc="kicker.name"/></option>
                                 </t>
                             </t>
                         </select>
@@ -243,16 +243,16 @@
                         <t t-if="widget.kickers">
                             <t t-foreach="widget.kickers" t-as="kicker">
                                 <t t-if="kicker.id === widget.default_kicker">
-                                    <option t-att-value="kicker.id" selected="true"><t t-esc="kicker.nickname"/></option>
+                                    <option t-att-value="kicker.id" selected="true"><t t-esc="kicker.name"/></option>
                                 </t>
                                 <t t-else="0">
-                                    <option t-att-value="kicker.id"><t t-esc="kicker.nickname"/></option>
+                                    <option t-att-value="kicker.id"><t t-esc="kicker.name"/></option>
                                 </t>
                             </t>
                         </t>
                     </select>
                 </div>
-                <h4>Green Team</h4>
+                <h4>Team 1</h4>
                 <div class="form-group">
                     <label for="player1">Members</label>
                     <select class="form-control" name="player11">
@@ -278,9 +278,9 @@
                     <input type="number" name="score1" value="0" min="0" step="1" class="form-control"/>
                 </div>
                 <br/>
-                <h4>Red Team</h4>
+                <h4>Team 2</h4>
                 <div class="form-group">
-                    <label for="player1">Members</label>
+                    <label for="player2">Members</label>
                     <select class="form-control" name="player21">
                         <option value="-1">Select player...</option>
                         <t t-if="widget.players">

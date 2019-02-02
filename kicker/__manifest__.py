@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'views/kicker_templates.xml',
         'views/kicker_views.xml',
+        'data/kicker_data.xml',
     ],
     'demo': [
     	'data/kicker_demo.xml',

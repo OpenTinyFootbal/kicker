@@ -4,12 +4,12 @@
 
         <!-- kickers -->
         <record id="kicker_gr" model="kicker.kicker">
-            <field name="nickname">GR North</field>
+            <field name="name">GR North</field>
             <field name="location">San Grand Rosiere</field>
         </record>
 
         <record id="kicker_gr_south" model="kicker.kicker">
-            <field name="nickname">GR South</field>
+            <field name="name">GR South</field>
             <field name="location">Rue des Bourlottes</field>
         </record>
 

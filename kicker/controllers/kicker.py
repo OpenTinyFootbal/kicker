@@ -23,20 +23,6 @@ class KickerController(Home):
 
     NUM_BG = 10
 
-    def _get_or_create_team(self, player1, player2=None):
-        if not player2:
-            domain = [('player_ids', 'in', player1.ids)]
-            player_ids = [(4, player1.id, False)]
-        else:
-            domain = ['&', ('player_ids', 'in', player1.ids), ('player_ids', 'in', player2.ids)]
-            player_ids = [(4, player1.id, False), (4, player2.id, False)]
-        team = request.env['kicker.team'].sudo().search(domain, limit=1)
-        if not team:
-            team = request.env['kicker.team'].sudo().create({
-                'player_ids': player_ids
-            })
-        return team
-
     @http.route(['/free', '/free/<model("kicker.kicker"):kicker>'], type='http', auth="public")
     def is_the_kicker_free(self, kicker=None, **kw):
         if not kicker:
@@ -79,28 +65,12 @@ class KickerController(Home):
     @http.route('/app/json/dashboard', type='json', auth='user', csrf=False)
     def dashboard(self, **kw):
         partner = request.env.user.partner_id
-        teammates = partner.kicker_team_ids.mapped('player_ids') - partner
-        nightmares = partner.browse()
-        data = {
-            'name': partner.name,
-            'wins': partner.wins,
-            'losses': partner.losses,
-            'teammates': teammates.read(['id', 'name', 'tagline']),
-            'nightmares': nightmares.read(['id', 'name', 'tagline']),
-            'graph': [58, 69, 61, 85, 89]
-        }
-        return data
+        return partner._dashboard_stats()
 
     @http.route('/app/json/community', type='json', auth='user', csrf=False)
     def community(self, **kw):
         partner = request.env.user.partner_id
-        usual = partner.kicker_team_ids.mapped('player_ids') - partner
-        rare = partner.search([('kicker_player', '=', True), ('id', 'not in', usual.ids)]) - partner
-        demo_data = {
-            'usual': usual.read(['id', 'name', 'tagline']),
-            'rare': rare.read(['id', 'name', 'tagline']),
-        }
-        return demo_data
+        return partner._community_stats()
 
     @http.route(['/app/json/player', '/app/json/player/<int:player_id>'], type='json', auth='user')
     def player_info(self, player_id=None, **kw):
@@ -130,7 +100,7 @@ class KickerController(Home):
 
     @http.route(['/app/json/kickers'], type='json', auth='user')
     def list_kickers(self, **kw):
-        kickers = request.env['kicker.kicker'].sudo().search_read([], fields=['id', 'nickname'])
+        kickers = request.env['kicker.kicker'].sudo().search_read([], fields=['id', 'name'])
         default = request.env.user.partner_id.main_kicker_id.id
         return {'kickers': kickers, 'default': default}
 
@@ -143,13 +113,15 @@ class KickerController(Home):
             raise UserError(_('There must be at least one player per team.'))
         player12 = post.get('player12') and Partner.browse(int(post.get('player12')))
         player22 = post.get('player22') and Partner.browse(int(post.get('player22')))
-        green_team = self._get_or_create_team(player11, player12)
-        red_team = self._get_or_create_team(player21, player22)
         kicker = request.env['kicker.kicker'].browse(int(post.get('kicker_id')))
         game = request.env['kicker.game'].sudo().create({
             'kicker_id': kicker.id,
-            'score_ids': [(0, False, {'team_id': green_team.id, 'score': int(post.get('score1'))}),
-                          (0, False, {'team_id': red_team.id, 'score': int(post.get('score2'))})],
+            'score_1': post.get('score1'),
+            'score_2': post.get('score2'),
+            'session_ids':[(0, False, {'player_id': player11.id, 'team': 'team_1'}),
+                           (0, False, {'player_id': player12.id, 'team': 'team_1'}),
+                           (0, False, {'player_id': player21.id, 'team': 'team_2'}),
+                           (0, False, {'player_id': player22.id, 'team': 'team_2'}),],
         })
         return {'success': True, 'game_id': game.id}
 
