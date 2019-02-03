@@ -5,6 +5,7 @@ var core = require('web.core');
 var time = require('web.time');
 var Widget = require('web.Widget');
 var local_storage = require('web.local_storage');
+var root = require('web_editor.root_widget');
 var Router = require('kicker.router');
 var rpc = require('web.rpc');
 var _t = core._t;
@@ -226,7 +227,8 @@ var AddScore = Widget.extend({
                 self.players = players;
                 self.kickers = kickers.kickers;
                 self.default_kicker = kickers.default;
-                self.renderElement();            
+                self.renderElement();     
+                self.$('select.form-control').select2();       
             });
     },
     _onSubmit: function (ev) {
@@ -382,7 +384,7 @@ var App = Widget.extend({
   },
 });
 
-var app = new App();
+var app = new App(root);
 var el = $('.o_kicker_app');
 app.attachTo(el);
 
