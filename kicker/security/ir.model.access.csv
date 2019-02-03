@@ -7,3 +7,5 @@ access_kicker_session_user,kicker.sessions.user,model_kicker_session,base.group_
 access_kicker_session_manager,kicker.sessions.manager,model_kicker_session,kicker.group_kicker_manager,1,1,1,1
 access_kicker_game_user,kicker.game.user,model_kicker_game,base.group_user,1,0,0,0
 access_kicker_game_manager,kicker.game.manager,model_kicker_game,kicker.group_kicker_manager,1,1,1,1
+access_kicker_stat_user,kicker.sessions.user,model_kicker_stat,base.group_user,1,0,0,0
+access_kicker_stat_manager,kicker.sessions.manager,model_kicker_stat,kicker.group_kicker_manager,1,1,1,1

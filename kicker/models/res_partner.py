@@ -30,6 +30,47 @@ class ResPartner(models.Model):
         ordered_friend_ids = list(map(lambda f: f['player_id'][0], sorted(friend_sessions, key=lambda f: f['player_id_count'], reverse=True)))
         return self.browse(ordered_friend_ids)
 
+    def _get_teammeates(self, period=False, limit=6):
+        self.ensure_one()
+        domain = [('player_id', '=', self.id), ('won', '=', True)]
+        if period=='month':
+            month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
+            domain.append([('date', '>', month_ago)])
+        mates = self.env['kicker.stat'].read_group(domain=domain,
+                                                   fields=['teammate_id'], groupby=['teammate_id'])
+        ordered_mates = list(map(lambda f: f['teammate_id'][0], sorted(mates, key=lambda f: f['teammate_id_count'], reverse=True)))
+        if limit:
+            ordered_mates = ordered_mates[:limit]
+        return self.browse(ordered_mates)
+    
+    def _get_opponents(self, period=False, limit=6):
+        self.ensure_one()
+        domain = [('player_id', '=', self.id), ('won', '=', False)]
+        if period=='month':
+            month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
+            domain.append([('date', '>', month_ago)])
+        # check for all stats where the opponent is in either opponent1_id or opponent2_id field
+        opps1 = self.env['kicker.stat'].read_group(domain=domain,
+                                                   fields=['opponent1_id'], groupby=['opponent1_id'])
+        opps2 = self.env['kicker.stat'].read_group(domain=domain,
+                                                   fields=['opponent2_id'], groupby=['opponent2_id'])
+        # combine data (in case an opponent is present in both fields)
+        all_opps = list(map(lambda o: o['opponent1_id'][0], opps1))
+        all_opps += list(map(lambda o: o['opponent2_id'][0], opps2))
+        all_opps = set(all_opps)
+        vals = dict.fromkeys(all_opps, 0)
+        for opp in all_opps:
+            as_opp1 = list(filter(lambda o: o['opponent1_id'][0]==opp, opps1))
+            if as_opp1:
+                vals[opp] += as_opp1[0]['opponent1_id_count']
+            as_opp2 = list(filter(lambda o: o['opponent2_id'][0]==opp, opps2))
+            if as_opp2:
+                vals[opp] += as_opp2[0]['opponent2_id_count']
+        ordered_opps = sorted(vals.items(), key=lambda e: e[1], reverse=True)
+        ordered_opps = [o[0] for o in ordered_opps]
+        if limit:
+            ordered_opps = ordered_opps[:limit]
+        return self.browse(ordered_opps)
 
     def _community_stats(self):
         usual = self._get_usual_players()
@@ -40,8 +81,8 @@ class ResPartner(models.Model):
         }
 
     def _dashboard_stats(self):
-        teammates = self._get_usual_players()
-        nightmares = self.browse()
+        teammates = self._get_teammeates()
+        nightmares = self._get_opponents()
         data = {
             'name': self.name,
             'wins': self.wins,
