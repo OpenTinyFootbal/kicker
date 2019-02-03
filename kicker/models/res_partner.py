@@ -25,10 +25,10 @@ class ResPartner(models.Model):
     def _get_usual_players(self):
         self.ensure_one()
         month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
-        monthly_games = self.env['kicker.game'].search([('session_ids', 'in', self.kicker_session_ids.ids), ('create_date', '>', month_ago)])
-        friend_sessions = self.env['kicker.session'].read_group(domain=[('game_id', 'in', monthly_games.ids), ('player_id', '!=', self.id)],groupby=['player_id'], fields=['player_id'])
-        ordered_friend_ids = list(map(lambda f: f['player_id'][0], sorted(friend_sessions, key=lambda f: f['player_id_count'], reverse=True)))
-        return self.browse(ordered_friend_ids)
+        friends = self.env['kicker.stat'].read_group(domain=[('player_id', '=', self.id), ('date', '>', month_ago)],
+                                                   fields=['teammate_id'], groupby=['teammate_id'])
+        ordered_friends = list(map(lambda f: f['teammate_id'][0], sorted(friends, key=lambda f: f['teammate_id_count'], reverse=True)))
+        return self.browse(ordered_friends)
 
     def _get_teammeates(self, period=False, limit=6):
         self.ensure_one()
@@ -74,11 +74,26 @@ class ResPartner(models.Model):
 
     def _community_stats(self):
         usual = self._get_usual_players()
-        rare = self.search([('kicker_player', '=', True), ('id', 'not in', usual.ids + self.ids)])
+        rare = self.search([('kicker_player', '=', True), ('id', 'not in', usual.ids + self.ids)], order='name asc')
         return {
             'usual': usual.read(['id', 'name', 'tagline']),
             'rare': rare.read(['id', 'name', 'tagline']),
         }
+
+    def _compute_ratio(self, period=False):
+        domain = [('player_id', '=', self.id)]
+        if period=='month':
+            month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
+            domain.append([('date', '>', month_ago)])
+        if period=='year':
+            year_ago = datetime.datetime.now() - relativedelta.relativedelta(years=1)
+            domain.append([('date', '>', year_ago)])
+        stats = self.env['kicker.stat'].read_group(domain=domain,
+                                                   fields=['date', 'won'], groupby=['date:month', 'won'], lazy=False)
+        print(stats)
+        stats = list(map(lambda w: (w['date:month'], w['date_count']), stats))
+        print(stats)
+        return stats
 
     def _dashboard_stats(self):
         teammates = self._get_teammeates()
@@ -89,6 +104,7 @@ class ResPartner(models.Model):
             'losses': self.losses,
             'teammates': teammates.read(['id', 'name', 'tagline']),
             'nightmares': nightmares.read(['id', 'name', 'tagline']),
+            'ratio': 75,
             'graph': [58, 69, 61, 85, 89]
         }
         return data

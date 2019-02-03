@@ -36,6 +36,24 @@ var Dashboard = Widget.extend({
                 }
             }
         };
+        this.ratioData = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [0, 100],
+                    backgroundColor: [
+                        '#161E6D',
+                        'rgba(255,255,255,0)',
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                tooltips: {
+                    enabled: false,
+                },
+            }
+        };
     },
     start: function () {
         var self = this;
@@ -51,6 +69,7 @@ var Dashboard = Widget.extend({
                 self.teammates = data.teammates;
                 self.nightmares = data.nightmares;
                 self.chartData.data.datasets[0].data = data.graph;
+                self.ratioData.data.datasets[0].data = [data.ratio, 100-data.ratio];
                 self.name = data.name;
                 self.renderElement();            
             });
@@ -58,6 +77,7 @@ var Dashboard = Widget.extend({
     renderElement: function () {
         var result = this._super.apply(this, arguments);
         new Chart(this.$('#o_kicker_main_chart')[0].getContext('2d'), this.chartData);
+        new Chart(this.$('#o_kicker_ratio_chart')[0].getContext('2d'), this.ratioData)
         return result;
     }    
 });
@@ -213,6 +233,8 @@ var Community = Widget.extend({
             });
     },
 });
+
+
 
 var About = Widget.extend({
     template: 'About',
