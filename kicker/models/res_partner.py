@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 import datetime
 from dateutil import relativedelta
@@ -92,3 +92,35 @@ class ResPartner(models.Model):
             'graph': [58, 69, 61, 85, 89]
         }
         return data
+
+    @api.model
+    def _get_rankings(self, period='month'):
+        domain = [('won', '=', True)]
+        if period=='month':
+            month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
+            domain.append(('date', '>', month_ago))
+        if period=='year':
+            year_ago = datetime.datetime.now() - relativedelta.relativedelta(years=1)
+            domain.append(('date', '>', year_ago))
+        stats = self.env['kicker.stat'].read_group(domain=domain,
+                                                   fields=['player_id'], groupby=['player_id'])
+        stats = map(lambda s: (s['player_id'][0], s['player_id_count']), stats)
+        ordered_stats = sorted(stats, key=lambda s: s[1], reverse=True)
+        # proably possible to get it in the read_group, i'm being lazy
+        partner_ids = list(map(lambda s: s[0], ordered_stats))
+        partner_names = dict.fromkeys(partner_ids)
+        names = self.browse(partner_ids).read(['name'])
+        for pid in partner_ids:
+            partner_names[pid] = list(filter(lambda s: s['id']==pid, names))[0]['name']
+        res = list()
+        for rank, stat in enumerate(ordered_stats):
+            res.append({
+                'id': stat[0],
+                'rank': rank,
+                'name': partner_names[stat[0]],
+                'count': stat[1],
+            })
+        return {
+            'players': res,
+            'label': _("Won Matches")
+        }

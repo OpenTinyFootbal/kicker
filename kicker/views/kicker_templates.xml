@@ -159,7 +159,7 @@ App Pages Templates
       <ul id="main-nav" class="nav flex-column">
         <li class="nav-item"><a class="nav-link text-primary" href="/app/dashboard" data-router="true">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link text-primary" href="/app/profile" data-router="true">Profile</a></li>
-        <li class="nav-item"><a class="nav-link text-primary" href="#">Stats</a></li>
+        <li class="nav-item"><a class="nav-link text-primary" href="/app/rankings">Rankings</a></li>
         <li class="nav-item"><a class="nav-link text-primary" href="/app/community" data-router="true">Community</a></li>
       </ul>
       <div id="small-nav">

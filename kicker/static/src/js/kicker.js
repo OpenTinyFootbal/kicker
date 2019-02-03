@@ -177,6 +177,24 @@ var Profile = Widget.extend({
     },
 });
 
+var Rankings = Widget.extend({
+    template: 'Rankings',
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+    start: function () {
+        var self = this;
+        return $.when(
+            rpc.query({
+                route: '/app/json/rankings',
+            }),
+            this._super.apply(this, arguments)
+        )
+            .then(function(data) {
+                self.data = data;
+                self.renderElement();            
+            });
+    },
+});
+
 var Community = Widget.extend({
     template: 'Community',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
@@ -292,6 +310,7 @@ var App = Widget.extend({
       dashboard: Dashboard,
       profile: Profile,
       community: Community,
+      rankings: Rankings,
       about: About,
       offline: Offline,
       communityProfile: CommunityProfile,
@@ -310,6 +329,9 @@ var App = Widget.extend({
       .add(/profile/, function () {
           self._switchPage('profile');
       })
+      .add(/rankings/, function () {
+        self._switchPage('rankings');
+    })
       .add(/community\/player\/(.*)/, function (player_id) {
           self._switchPage('communityProfile', {player_id: player_id});
       })
