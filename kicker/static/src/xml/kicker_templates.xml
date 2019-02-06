@@ -160,33 +160,20 @@
     <t t-name="Rankings">
         <div class="container-fluid o_kicker_main">
             <h5 class="text-primary"><strong>Rankings</strong></h5>
-            <label>Aim for the top!</label>
             <div class="container-fluid">
                 <div class="row">
-                    <t t-if="widget.data">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <td class="text-right">Rank</td>
-                                    <td>Player</td>
-                                    <td t-esc="widget.data.label"/>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="widget.data.players" t-as="player">
-                                    <td t-esc="player.rank + 1" class="text-right"/>
-                                    <td><a t-attf-href="/app/community/player/{{ player.id }}" data-router="true">
-                                        <img t-attf-src="/app/avatar/{{ player.id }}" class="rounded-circle o_kicker_profile_img" t-attf-alt="Avatar of {{ player.name }}" width="20px"/>
-                                        <t t-esc="player.name" />
-                                    </a></td>
-                                    <td t-esc="player.count" class="text-center"/>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </t>
-                    <t t-else="" t-call="PlayerCardLoader">
-                        <t t-set="card_class" t-value="'col-3 col-lg-2'"/>
-                    </t>
+                        <div class="btn-group btn-group-toggle mb4 container o_ranking_period" data-toggle="buttons">
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
+                                <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
+                            </label>
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
+                                <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
+                            </label>
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
+                                <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
+                            </label>
+                        </div>
+                    <table data-toggle="table"/>
                 </div>
             </div>
         </div>

@@ -7,11 +7,11 @@ class KickerStat(models.Model):
     _name = "kicker.stat"
     _description = "Kicker Statistic"
     _rec_name = 'date'
-    _order = 'id desc'
+    _order = 'date desc'
 
     player_id = fields.Many2one('res.partner', string='Player', readonly=True)
     session_id = fields.Many2one('kicker.session', string='Session', readonly=True)
-    game_id = fields.Many2one('kicker.game', string='Session', readonly=True)
+    game_id = fields.Many2one('kicker.game', string='Game', readonly=True)
     date = fields.Datetime('Game Date', readonly=True)
     won = fields.Boolean('Won', readonly=True)
     teammate_id = fields.Many2one('res.partner', string='Teammate', readonly=True)
@@ -27,7 +27,7 @@ class KickerStat(models.Model):
             g.id as game_id,
             p.id as player_id,
             s.won as won,
-            g.create_date as date,
+            g.date as date,
             tm.id as teammate_id,
             o1.id as opponent1_id,
             o2.id as opponent2_id

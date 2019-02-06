@@ -72,7 +72,7 @@
         <field name="model">kicker.game</field>
         <field name="arch" type="xml">
             <tree string="Games">
-                <field name="create_date"/>
+                <field name="date"/>
                 <field name="kicker_id"/>
             </tree>
         </field>
@@ -89,7 +89,7 @@
                     </group>
                     <group>
                         <group>
-                            <field name="create_date"/>
+                            <field name="date"/>
                             <field name="session_ids">
                                 <tree editable="bottom">
                                     <field name="player_id"/>
@@ -144,6 +144,7 @@
                         <group>
                             <field name="wins"/>
                             <field name="losses"/>
+                            <field name="win_ratio" widget="percentpie"/>
                         </group>
                         <field name="kicker_session_ids"/>
                     </group>

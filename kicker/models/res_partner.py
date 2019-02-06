@@ -9,6 +9,7 @@ class ResPartner(models.Model):
     kicker_session_ids = fields.One2many('kicker.session', 'player_id', string='Kicker Sessions')
     wins = fields.Integer(compute='_compute_stats')
     losses = fields.Integer(compute='_compute_stats')
+    win_ratio = fields.Integer(compute='_compute_stats', string='Win Ratio')
     kicker_player = fields.Boolean()
     main_kicker_id = fields.Many2one('kicker.kicker', 'Default Kicker')
     tagline = fields.Char()
@@ -21,6 +22,10 @@ class ResPartner(models.Model):
             partner.wins = wins and sum(list(map(lambda w: w['__count'], wins)))
             losses = list(filter(lambda d: d['player_id'][0] == partner.id and not d['won'], data))
             partner.losses = losses and sum(list(map(lambda l: l['__count'], losses)))
+            if not (partner.wins + partner.losses):
+                partner.win_ratio = 0
+            else:
+                partner.win_ratio = 100*partner.wins/(partner.wins+partner.losses)
 
     def _get_usual_players(self):
         self.ensure_one()
@@ -96,6 +101,7 @@ class ResPartner(models.Model):
         return stats
 
     def _dashboard_stats(self):
+        self.ensure_one()
         teammates = self._get_teammeates()
         nightmares = self._get_opponents()
         data = {
@@ -104,39 +110,36 @@ class ResPartner(models.Model):
             'losses': self.losses,
             'teammates': teammates.read(['id', 'name', 'tagline']),
             'nightmares': nightmares.read(['id', 'name', 'tagline']),
-            'ratio': 75,
+            'ratio': self.win_ratio,
             'graph': [58, 69, 61, 85, 89]
         }
         return data
 
     @api.model
-    def _get_rankings(self, period='month'):
-        domain = [('won', '=', True)]
-        if period=='month':
-            month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
-            domain.append(('date', '>', month_ago))
-        if period=='year':
-            year_ago = datetime.datetime.now() - relativedelta.relativedelta(years=1)
-            domain.append(('date', '>', year_ago))
+    def _get_rankings(self, period='month', metric='all'):
+        if period=='week':
+            date_limit = datetime.datetime.now() - relativedelta.relativedelta(weeks=1)
+        elif period=='month':
+            date_limit = datetime.datetime.now() - relativedelta.relativedelta(months=1)
+        elif period=='year':
+            date_limit = datetime.datetime.now() - relativedelta.relativedelta(years=1)
+        domain = [('date', '>', date_limit)]
         stats = self.env['kicker.stat'].read_group(domain=domain,
-                                                   fields=['player_id'], groupby=['player_id'])
-        stats = map(lambda s: (s['player_id'][0], s['player_id_count']), stats)
-        ordered_stats = sorted(stats, key=lambda s: s[1], reverse=True)
+                                                   fields=['player_id', 'won'],
+                                                   groupby=['player_id', 'won'],
+                                                   lazy=False)
         # proably possible to get it in the read_group, i'm being lazy
-        partner_ids = list(map(lambda s: s[0], ordered_stats))
-        partner_names = dict.fromkeys(partner_ids)
+        partner_ids = set(map(lambda s: s['player_id'][0], stats))
         names = self.browse(partner_ids).read(['name'])
-        for pid in partner_ids:
-            partner_names[pid] = list(filter(lambda s: s['id']==pid, names))[0]['name']
         res = list()
-        for rank, stat in enumerate(ordered_stats):
+        for pid in partner_ids:
+            wins = list(filter(lambda s: {('player_id','=',pid),('won','=',True)}.issubset(s['__domain']),stats))[0]['__count']
+            losses = list(filter(lambda s: {('player_id','=',pid),('won','=',False)}.issubset(s['__domain']),stats))[0]['__count']
             res.append({
-                'id': stat[0],
-                'rank': rank,
-                'name': partner_names[stat[0]],
-                'count': stat[1],
+                'id': pid,
+                'name': list(filter(lambda s: s['id']==pid, names))[0]['name'],
+                'won': wins,
+                'lost': losses,
+                'matches': wins + losses,
             })
-        return {
-            'players': res,
-            'label': _("Won Matches")
-        }
+        return res

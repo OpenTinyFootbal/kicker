@@ -200,19 +200,74 @@ var Profile = Widget.extend({
 var Rankings = Widget.extend({
     template: 'Rankings',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+    events: {
+        'click .o_ranking_period label': '_changePeriod',
+    },
+    init: function() {
+        this._super.apply(this, arguments);
+        this.period = 'month';
+    },
     start: function () {
         var self = this;
         return $.when(
-            rpc.query({
-                route: '/app/json/rankings',
-            }),
+            this._queryData(),
             this._super.apply(this, arguments)
         )
             .then(function(data) {
-                self.data = data;
-                self.renderElement();            
+                self._renderData(data)
             });
     },
+    _renderData: function(data) {
+        if (this.loaded) {
+            this.$('table[data-toggle="table"]').bootstrapTable('load', data);
+        } else {
+            this.$('table[data-toggle="table"]').bootstrapTable({
+                sortable: true,
+                columns: [{
+                    field: 'rank',
+                    title: '#',
+                    formatter: this.rankFormatter,
+                }, {
+                    field: 'name',
+                    title: 'Player',
+                }, {
+                    field: 'won',
+                    title: 'Won',
+                    sortable: true,
+                }, {
+                    field: 'lost',
+                    title: 'Lost',
+                    sortable: true,
+                }, {
+                    field: 'matches',
+                    title: 'Matches',
+                    sortable: true,
+                }],
+                data: data,
+            });
+            this.loaded = true;
+        }
+    },
+    rankFormatter: function(value, row, index) {
+        return index+1;
+    },
+    _queryData: function() {
+        return rpc.query({
+            route: '/app/json/rankings',
+            params: {"period": this.period},
+        });
+    },
+    _changePeriod: function(ev) {
+        ev.preventDefault();
+        var $e = $(ev.target);
+        $e.parent().find('label.active').removeClass('active');
+        $e.addClass('active');
+        this.period = $e.find('input').attr('value');
+        var self = this;
+        return this._queryData().then(function(data) {
+            self._renderData(data);
+        })
+    }
 });
 
 var Community = Widget.extend({

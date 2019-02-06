@@ -13,6 +13,8 @@
     <script type="text/javascript" src="/kicker/static/src/js/router.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/kicker.js"/>
     <script type="text/javascript" src="/kicker/static/lib/jquery.mobile.custom.min.js"/>
+    <script type="text/javascript" src="/kicker/static/lib/bootstrap-table/bootstrap-table.js"/>
+    <link rel='stylesheet' type="text/less" href='/kicker/static/lib/bootstrap-table/bootstrap-table.scss'/>
   </xpath>
 </template>
 

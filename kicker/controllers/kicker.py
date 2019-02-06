@@ -68,9 +68,9 @@ class KickerController(Home):
         return partner._dashboard_stats()
 
     @http.route('/app/json/rankings', type='json', auth='user', csrf=False)
-    def rankings(self, **kw):
+    def rankings(self, period='month', **kw):
         partner = request.env.user.partner_id.sudo()
-        return partner._get_rankings()
+        return partner._get_rankings(period=period)
 
 
     @http.route('/app/json/community', type='json', auth='user', csrf=False)
