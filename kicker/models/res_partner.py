@@ -7,25 +7,37 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     kicker_session_ids = fields.One2many('kicker.session', 'player_id', string='Kicker Sessions')
-    wins = fields.Integer(compute='_compute_stats')
-    losses = fields.Integer(compute='_compute_stats')
+    wins = fields.Integer(compute='_compute_stats', string='Total Wins')
+    losses = fields.Integer(compute='_compute_stats', string='Total Losses')
     win_ratio = fields.Integer(compute='_compute_stats', string='Win Ratio')
+    weekly_wins = fields.Integer(compute='_compute_stats', string='Weekly Wins')
+    weekly_losses = fields.Integer(compute='_compute_stats', string='Weekly Losses')
+    weekly_win_ratio = fields.Integer(compute='_compute_stats', string='Weekly Win Ratio')
     kicker_player = fields.Boolean()
     main_kicker_id = fields.Many2one('kicker.kicker', 'Default Kicker')
     tagline = fields.Char()
 
     @api.depends('kicker_session_ids')
     def _compute_stats(self):
-        data = self.env['kicker.session'].read_group([('player_id', 'in', self.ids)], fields=['player_id', 'won'], groupby=['player_id', 'won'], lazy=False)
+        all_data = self.env['kicker.session'].read_group([('player_id', 'in', self.ids)], fields=['player_id', 'won'], groupby=['player_id', 'won'], lazy=False)
+        weekly_data = self.env['kicker.session'].read_group([('player_id', 'in', self.ids), ('game_date', '>', datetime.datetime.now() - datetime.timedelta(days=7))], fields=['player_id', 'won'], groupby=['player_id', 'won'], lazy=False)
         for partner in self:
-            wins = list(filter(lambda d: d['player_id'][0] == partner.id and d['won'], data))
+            wins = list(filter(lambda d: d['player_id'][0] == partner.id and d['won'], all_data))
             partner.wins = wins and sum(list(map(lambda w: w['__count'], wins)))
-            losses = list(filter(lambda d: d['player_id'][0] == partner.id and not d['won'], data))
+            losses = list(filter(lambda d: d['player_id'][0] == partner.id and not d['won'], all_data))
             partner.losses = losses and sum(list(map(lambda l: l['__count'], losses)))
             if not (partner.wins + partner.losses):
                 partner.win_ratio = 0
             else:
                 partner.win_ratio = 100*partner.wins/(partner.wins+partner.losses)
+            weekly_wins = list(filter(lambda d: d['player_id'][0] == partner.id and d['won'], weekly_data))
+            partner.weekly_wins = weekly_wins and sum(list(map(lambda w: w['__count'], weekly_wins)))
+            weekly_losses = list(filter(lambda d: d['player_id'][0] == partner.id and not d['won'], weekly_data))
+            partner.weekly_losses = weekly_losses and sum(list(map(lambda l: l['__count'], weekly_losses)))
+            if not (partner.weekly_wins + partner.weekly_losses):
+                partner.weekly_win_ratio = 0
+            else:
+                partner.weekly_win_ratio = 100*partner.weekly_wins/(partner.weekly_wins+partner.weekly_losses)
 
     def _get_usual_players(self):
         self.ensure_one()

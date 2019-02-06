@@ -145,6 +145,9 @@
                             <field name="wins"/>
                             <field name="losses"/>
                             <field name="win_ratio" widget="percentpie"/>
+                            <field name="weekly_wins"/>
+                            <field name="weekly_losses"/>
+                            <field name="weekly_win_ratio" widget="percentpie"/>
                         </group>
                         <field name="kicker_session_ids"/>
                     </group>

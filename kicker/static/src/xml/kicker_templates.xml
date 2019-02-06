@@ -148,6 +148,32 @@
                 <t t-if="widget.player.main_kicker_id">
                     <h5>Mainly plays at <b t-esc="widget.player.main_kicker_id[1]"/></h5>
                 </t>
+                <div class="container text-left">
+                    <h4>Weekly Stats</h4>
+                    <div class="row">
+                        <div class="card col-4 text-center">
+                            <div class="card-body">
+                                <i class="fa fa-3x fa-trophy mb8"/>
+                                <h5 class="card-title">Won</h5>
+                                <p class="card-text" t-esc="widget.player.weekly_wins"/>
+                            </div>
+                        </div>
+                        <div class="card col-4 text-center">
+                            <div class="card-body">
+                                <i class="fa fa-3x fa-thumbs-down mb8"/>
+                                <h5 class="card-title">Lost</h5>
+                                <p class="card-text" t-esc="widget.player.weekly_losses"/>
+                            </div>
+                        </div>
+                        <div class="card col-4 text-center">
+                            <div class="card-body">
+                                <i class="fa fa-3x fa-percent mb8"/>
+                                <h5 class="card-title">Ratio</h5>
+                                <p class="card-text" t-esc="widget.player.weekly_win_ratio"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div t-else="" class="text-center o_kicker_profile_content">
                 <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder o_kicker_profile_img" width="128px" alt=""/>
