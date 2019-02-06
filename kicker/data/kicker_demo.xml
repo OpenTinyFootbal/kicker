@@ -95,5 +95,9 @@
         <record id="base.main_company" model="res.company">
             <field name="logo" type="base64" file="kicker/static/icons/logo_colored.png"/>
         </record>
+
+        <function model="kicker.game" name="_generate_demo_data">
+            <value eval='1000'/>
+        </function> 
     </data>
 </odoo>
