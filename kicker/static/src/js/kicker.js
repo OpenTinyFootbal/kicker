@@ -202,10 +202,14 @@ var Rankings = Widget.extend({
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     events: {
         'click .o_ranking_period label': '_changePeriod',
+        'sort.bs.table table': '_onSort',
     },
     init: function() {
         this._super.apply(this, arguments);
         this.period = 'month';
+        this.loaded = false;
+        this.reverse_rank = false;
+        this.data = false;
     },
     start: function () {
         var self = this;
@@ -218,18 +222,22 @@ var Rankings = Widget.extend({
             });
     },
     _renderData: function(data) {
+        var self = this;
         if (this.loaded) {
-            this.$('table[data-toggle="table"]').bootstrapTable('load', data);
+            this.$('table[data-toggle="table"]').bootstrapTable('load', this.data);
         } else {
             this.$('table[data-toggle="table"]').bootstrapTable({
-                sortable: true,
+                sortName: 'won',
+                sortOrder: 'desc',
+                classes: 'table table-borderless table-hover table-sm',
                 columns: [{
                     field: 'rank',
                     title: '#',
-                    formatter: this.rankFormatter,
+                    formatter: function(v,r,i) {return self.reverse_rank?self.data.length-i:i+1;},
                 }, {
                     field: 'name',
                     title: 'Player',
+                    formatter: this._nameFormatter,
                 }, {
                     field: 'won',
                     title: 'Won',
@@ -243,19 +251,30 @@ var Rankings = Widget.extend({
                     title: 'Matches',
                     sortable: true,
                 }],
-                data: data,
+                data: this.data,
             });
             this.loaded = true;
         }
     },
-    rankFormatter: function(value, row, index) {
-        return index+1;
+    _nameFormatter: function(value, row, index) {
+        // shitty string literal instead of qweb but well ¯\_(ツ)_/¯
+        return `<a href="/app/community/player/${row.id}" data-router="true">${value}</a>`;
     },
     _queryData: function() {
+        var self=this;
         return rpc.query({
             route: '/app/json/rankings',
             params: {"period": this.period},
+        }).then(function(data) {
+            self.data = data;
         });
+    },
+    _onSort: function(e, field, order) {
+        if (order === 'asc') {
+            this.reverse_rank = field!=='lost';
+        } else {
+            this.reverse_rank = field==='lost';
+        }
     },
     _changePeriod: function(ev) {
         ev.preventDefault();

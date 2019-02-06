@@ -159,22 +159,22 @@
 
     <t t-name="Rankings">
         <div class="container-fluid o_kicker_main">
-            <h5 class="text-primary"><strong>Rankings</strong></h5>
+            <div class="container">
+                <h5 class="text-primary"><strong>Rankings</strong></h5>
+            </div>
+            <div class="btn-group btn-group-toggle mb8 container o_ranking_period" data-toggle="buttons">
+                <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
+                    <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
+                </label>
+                <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
+                    <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
+                </label>
+                <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
+                    <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
+                </label>
+            </div>
             <div class="container-fluid">
-                <div class="row">
-                        <div class="btn-group btn-group-toggle mb4 container o_ranking_period" data-toggle="buttons">
-                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
-                                <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
-                            </label>
-                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
-                                <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
-                            </label>
-                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
-                                <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
-                            </label>
-                        </div>
-                    <table data-toggle="table"/>
-                </div>
+            <table data-toggle="table"/>
             </div>
         </div>
     </t>
