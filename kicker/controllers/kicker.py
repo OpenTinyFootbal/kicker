@@ -88,7 +88,7 @@ class KickerController(Home):
         fields = ['id', 'name', 'email', 'main_kicker_id', 'tagline',
                   'wins', 'losses', 'win_ratio', 'weekly_wins', 'weekly_losses', 'weekly_win_ratio']
         return partner.sudo().read(fields)[0]
-    
+
     @http.route('/app/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
     def update_profile(self, name, tagline, main_kicker, avatar=None, **kw):
         partner = request.env.user.partner_id

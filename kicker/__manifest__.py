@@ -8,14 +8,14 @@
     'website': 'https://kicker.odoo.com',
     'depends': ['http_routing', 'bus', 'web_editor'],
     'data': [
-    	'security/kicker_security.xml',
+        'security/kicker_security.xml',
         'security/ir.model.access.csv',
         'views/kicker_templates.xml',
         'views/kicker_views.xml',
         'data/kicker_data.xml',
     ],
     'demo': [
-    	'data/kicker_demo.xml',
+        'data/kicker_demo.xml',
     ],
     'application': True,
 }
