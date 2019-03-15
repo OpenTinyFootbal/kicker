@@ -6,7 +6,7 @@
     'sequence': 6,
     'summary': 'Kicker in the Lunch Room',
     'website': 'https://kicker.odoo.com',
-    'depends': ['http_routing', 'bus', 'web_editor'],
+    'depends': ['http_routing', 'bus', 'web_editor', 'auth_signup'],
     'data': [
         'security/kicker_security.xml',
         'security/ir.model.access.csv',
