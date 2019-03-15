@@ -65,7 +65,8 @@ class KickerSession(models.Model):
     game_id = fields.Many2one('kicker.game', required=True, index=True)
     won = fields.Boolean(compute='_compute_won', store=True)
     team = fields.Selection([('team_1', 'Team 1'), ('team_2', 'Team 2')], required=True)
-    player_id = fields.Many2one('res.partner', string='Player', index=True)
+    player_id = fields.Many2one('res.partner', string='Player', index=True,
+        domain="[('kicker_player', '=', True)]")
     game_date = fields.Datetime(related='game_id.date', store=True)
 
     @api.depends('game_id', 'game_id.winning_team')
