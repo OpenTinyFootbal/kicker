@@ -12,7 +12,7 @@ class KickerGame(models.Model):
     _order = 'create_date DESC'
 
     name = fields.Char(compute='_compute_name')
-    date = fields.Datetime(default=fields.Datetime.now, required=True)
+    date = fields.Date(default=fields.Date.context_today, required=True)
     kicker_id = fields.Many2one('kicker.kicker', string='Kicker', ondelete='restrict', index=True)
     winning_team = fields.Selection([('team_1', 'Team 1'), ('team_2', 'Team 2')], compute='_compute_winning_team', store=True)
     score_1 = fields.Integer(string="Team 1 Score", required=True)
