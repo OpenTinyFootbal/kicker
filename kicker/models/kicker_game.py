@@ -27,7 +27,10 @@ class KickerGame(models.Model):
     @api.depends('score_1', 'score_2', 'session_ids')
     def _compute_name(self):
         for game in self:
-            game.name = '@'.join([str(game.date), game.kicker_id.name])
+            game.name = '@'.join([
+                self.env['ir.qweb.field.date'].value_to_html(game.date, {}),
+                game.kicker_id.name
+            ])
     
 #    @api.constrains('session_ids')
 #    def _validate_session(self):
@@ -67,7 +70,7 @@ class KickerSession(models.Model):
     team = fields.Selection([('team_1', 'Team 1'), ('team_2', 'Team 2')], required=True)
     player_id = fields.Many2one('res.partner', string='Player', index=True,
         domain="[('kicker_player', '=', True)]")
-    game_date = fields.Datetime(related='game_id.date', store=True)
+    game_date = fields.Date(related='game_id.date', store=True)
 
     @api.depends('game_id', 'game_id.winning_team')
     def _compute_won(self):
