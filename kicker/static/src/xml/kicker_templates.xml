@@ -19,16 +19,8 @@
                         </div>
                     </div>
                     <h5 class="text-primary"><strong>Your Statistics</strong></h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="o_kicker_ratio_chart" width="100" height="100"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="o_kicker_main_chart" width="400" height="400"></canvas>
-                        </div>
-                    </div>
+                    <div class="o_kicker_ratio_chart"/>
+                    <div class="o_kicker_line_chart" />
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <h5 class="text-primary "><strong>Your Best Teammates</strong></h5>
@@ -136,6 +128,19 @@
         </div>
     </t>
 
+    <t t-name="RatioChart">
+        <div class="chart-container">
+            <canvas id="o_kicker_ratio_chart"></canvas>
+            <h4 class="centered text-primary"><t t-esc="widget.ratio"/> %</h4>
+        </div>
+    </t>
+
+    <t t-name="LineChart">
+        <div class="chart-container">
+            <canvas id="o_kicker_line_chart" width="400" height="400"></canvas>
+        </div>
+    </t>
+
     <t t-name="CommunityProfile">
         <div class="container-fluid o_kicker_main o_kicker_profile">
             <div class="o_kicker_profile_backdrop"/>
@@ -148,32 +153,20 @@
                 <t t-if="widget.player.main_kicker_id">
                     <h5>Mainly plays at <b t-esc="widget.player.main_kicker_id[1]"/></h5>
                 </t>
-                <div class="container text-left">
-                    <h4>Weekly Stats</h4>
-                    <div class="row">
-                        <div class="card col-4 text-center">
-                            <div class="card-body">
-                                <i class="fa fa-3x fa-trophy mb8"/>
-                                <h5 class="card-title">Won</h5>
-                                <p class="card-text" t-esc="widget.player.weekly_wins"/>
-                            </div>
-                        </div>
-                        <div class="card col-4 text-center">
-                            <div class="card-body">
-                                <i class="fa fa-3x fa-thumbs-down mb8"/>
-                                <h5 class="card-title">Lost</h5>
-                                <p class="card-text" t-esc="widget.player.weekly_losses"/>
-                            </div>
-                        </div>
-                        <div class="card col-4 text-center">
-                            <div class="card-body">
-                                <i class="fa fa-3x fa-percent mb8"/>
-                                <h5 class="card-title">Ratio</h5>
-                                <p class="card-text" t-esc="widget.player.weekly_win_ratio"/>
-                            </div>
-                        </div>
-                    </div>
+                <div class="o_kicker_ratio_chart"/>
+                <h3 class="text-primary mt16"><strong>You &amp; <t t-esc="widget.player.name"/></strong></h3>
+                <div class="btn-group btn-group-toggle mb4 container o_ranking_period" data-toggle="buttons">
+                    <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
+                        <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
+                    </label>
+                    <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
+                        <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
+                    </label>
+                    <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
+                        <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
+                    </label>
                 </div>
+                <t t-call="CommunityPlayerMatches"/>
             </div>
             <div t-else="" class="text-center o_kicker_profile_content">
                 <img src="/kicker/static/icons/player.svg" class="rounded-circle avatar_placeholder o_kicker_profile_img" width="128px" alt=""/>
@@ -183,24 +176,51 @@
         </div>
     </t>
 
+    <t t-name="CommunityPlayerMatches">
+        <table class="table table-hover o_kicker_community_player_matches">
+            <thead>
+                <tr>
+                    <td/>
+                    <td>Won</td>
+                    <td>Lost</td>
+                    <td>Matches</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Together</td>
+                    <td t-esc="widget.player.stats.won_together"/>
+                    <td t-esc="widget.player.stats.lost_together"/>
+                    <td t-esc="widget.player.stats.won_together + widget.player.stats.lost_together"/>
+                </tr>
+                <tr>
+                    <td>Against</td>
+                    <td t-esc="widget.player.stats.won_against"/>
+                    <td t-esc="widget.player.stats.lost_against"/>
+                    <td t-esc="widget.player.stats.won_against + widget.player.stats.lost_against"/>
+                </tr>
+            </tbody>
+        </table>
+    </t>
+
     <t t-name="Rankings">
         <div class="container-fluid o_kicker_main">
-            <div class="container">
-                <h5 class="text-primary"><strong>Rankings</strong></h5>
-            </div>
-            <div class="btn-group btn-group-toggle mb8 container o_ranking_period" data-toggle="buttons">
-                <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
-                    <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
-                </label>
-                <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
-                    <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
-                </label>
-                <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
-                    <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
-                </label>
-            </div>
+            <h5 class="text-primary"><strong>Rankings</strong></h5>
             <div class="container-fluid">
-            <table data-toggle="table"/>
+                <div class="row">
+                        <div class="btn-group btn-group-toggle mb4 container o_ranking_period" data-toggle="buttons">
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
+                                <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
+                            </label>
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
+                                <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
+                            </label>
+                            <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
+                                <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
+                            </label>
+                        </div>
+                    <table data-toggle="table"/>
+                </div>
             </div>
         </div>
     </t>

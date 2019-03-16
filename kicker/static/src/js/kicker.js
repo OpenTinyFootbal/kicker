@@ -16,44 +16,8 @@ var Dashboard = Widget.extend({
     template: 'Dashboard',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     init: function () {
-        this.chartData = {
-            type: 'line',
-            data: {
-                labels: ['W1', 'W2', 'W3', 'W4', 'W5'],
-                datasets: [{
-                    label: 'Win/Loss Ratio',
-                    data: [1,1,1,1,1],
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 100,
-                        }
-                    }]
-                }
-            }
-        };
-        this.ratioData = {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [0, 100],
-                    backgroundColor: [
-                        '#161E6D',
-                        'rgba(255,255,255,0)',
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                tooltips: {
-                    enabled: false,
-                },
-            }
-        };
+        this.lineChart = undefined;
+        this.ratioChart = undefined;
     },
     start: function () {
         var self = this;
@@ -68,18 +32,14 @@ var Dashboard = Widget.extend({
                 self.losses = data.losses;
                 self.teammates = data.teammates;
                 self.nightmares = data.nightmares;
-                self.chartData.data.datasets[0].data = data.graph;
-                self.ratioData.data.datasets[0].data = [data.ratio, 100-data.ratio];
+                self.lineChart = new LineChart(this, data.graph);
+                self.ratioChart = new RatioChart(this, [data.ratio, 100-data.ratio]);
                 self.name = data.name;
-                self.renderElement();            
+                self.renderElement();
+                self.ratioChart.replace(self.$('.o_kicker_ratio_chart'));
+                self.lineChart.replace(self.$('.o_kicker_line_chart'));
             });
     },
-    renderElement: function () {
-        var result = this._super.apply(this, arguments);
-        new Chart(this.$('#o_kicker_main_chart')[0].getContext('2d'), this.chartData);
-        new Chart(this.$('#o_kicker_ratio_chart')[0].getContext('2d'), this.ratioData)
-        return result;
-    }    
 });
 
 var Profile = Widget.extend({
@@ -374,20 +334,135 @@ var AddScore = Widget.extend({
 var CommunityProfile = Widget.extend({
     template: 'CommunityProfile',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+    events: {
+        'click .o_ranking_period label': '_changePeriod',
+    },
     init: function (parents, options) {
         this._super.apply(this, arguments);
         this.player_id = options.player_id;
         this.player = undefined;
-        this.editable = false ;
+        this.editable = false;
+        this.period = 'month';
+        this.ratioChart = undefined;
     },
     willStart: function() {
         var self = this;
-        return rpc.query({
-            route: '/app/json/player/' + this.player_id
-        })
+        return $.when(
+            rpc.query({
+            route: '/app/json/player/' + this.player_id,
+            params: {"period": this.period},
+            }),
+            this._super.apply(this, arguments)
+        )
         .then(function (player_data) {
             self.player = player_data;
+            self.ratioChart = new RatioChart(this, [player_data.stats.wins, player_data.stats.losses]);
         });
+    },
+    start: function() {
+        var self = this;
+        return this._super.apply(this, arguments)
+                .then(function() {
+                    self.ratioChart.replace(self.$('.o_kicker_ratio_chart'));
+                });
+    },
+    _queryData: function() {
+        return rpc.query({
+            route: '/app/json/player/' + this.player_id,
+            params: {"period": this.period},
+        });
+    },
+    _renderTable: function() {
+        this.$('.o_kicker_community_player_matches').replaceWith(core.qweb.render('CommunityPlayerMatches', {widget: this}));
+    },
+    _changePeriod: function(ev) {
+        ev.preventDefault();
+        var $e = $(ev.target);
+        $e.parent().find('label.active').removeClass('active');
+        $e.addClass('active');
+        this.period = $e.find('input').attr('value');
+        var self = this;
+        return this._queryData().then(function(data) {
+            self.player = data;
+            self._renderTable();
+        });
+    }
+});
+
+var RatioChart = Widget.extend({
+    template: 'RatioChart',
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+    init: function(parent, data) {
+        this._super.apply(this, arguments);
+        this.data = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        '#FC812F',
+                        '#161E6D',
+                    ],
+                    borderWidth: 0
+                }],
+            },
+            options: {
+                tooltips: {
+                    enabled: false,
+                },
+                cutoutPercentage: 66,
+            },
+            responsive: false
+        };
+        this.chart = undefined;
+        this.ratio = Math.round(100*data[0]/(data[0] + data[1]));
+    },
+    start: function() {
+        var self = this;
+        return this._super.apply(this, arguments).then(function() {
+            self.chart = new Chart(self.$('#o_kicker_ratio_chart')[0].getContext('2d'), self.data);
+        });
+    },
+    update: function(data) {
+        this.chart.data = data;
+    },
+});
+
+var LineChart = Widget.extend({
+    template: 'LineChart',
+    xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
+    init: function(parent, data) {
+        this._super.apply(this, arguments);
+        this.data = {
+            type: 'line',
+            data: {
+                labels: ['W1', 'W2', 'W3', 'W4', 'W5'],
+                datasets: [{
+                    label: 'Win/Loss Ratio',
+                    data: [1,1,1,1,1],
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                        }
+                    }]
+                }
+            }
+        };
+        this.chart = undefined;
+    },
+    start: function() {
+        var self = this;
+        return this._super.apply(this, arguments).then(function() {
+            self.chart = new Chart(self.$('#o_kicker_line_chart')[0].getContext('2d'), self.data);
+        });
+    },
+    update: function(data) {
+        this.chart.data = data;
     },
 });
 

@@ -97,6 +97,34 @@ class ResPartner(models.Model):
             'rare': rare.read(['id', 'name', 'tagline']),
         }
 
+    def _stat_community_player(self, coplayer_id, period='month'):
+        self.ensure_one()
+        if period=='week':
+            date_limit = datetime.date.today() - relativedelta.relativedelta(weeks=1)
+        elif period=='month':
+            date_limit = datetime.date.today() - relativedelta.relativedelta(months=1)
+        elif period=='year':
+            date_limit = datetime.date.today() - relativedelta.relativedelta(years=1)
+        domain_against = [('date', '>', date_limit),
+                          ('player_id', '=', self.id),
+                              '|',
+                                  ('opponent1_id', '=', coplayer_id),
+                                  ('opponent1_id', '=', coplayer_id),
+                         ]
+        domain_with = [('date', '>', date_limit),
+                       ('player_id', '=', self.id),
+                       ('teammate_id', '=', coplayer_id),
+                      ]
+        return {
+            'wins': self.wins,
+            'losses': self.losses,
+            'win_ratio': self.win_ratio,
+            'won_against': self.env['kicker.stat'].search_count(domain_against + [('won', '=', True)]),
+            'lost_against': self.env['kicker.stat'].search_count(domain_against + [('won', '=', False)]),
+            'won_together': self.env['kicker.stat'].search_count(domain_with + [('won', '=', True)]),
+            'lost_together': self.env['kicker.stat'].search_count(domain_with + [('won', '=', False)]),
+        }
+
     def _compute_ratio(self, period=False):
         domain = [('player_id', '=', self.id)]
         if period=='month':

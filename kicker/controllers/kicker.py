@@ -78,16 +78,21 @@ class KickerController(Home):
         partner = request.env.user.partner_id
         return partner._community_stats()
 
-    @http.route(['/app/json/player', '/app/json/player/<int:player_id>'], type='json', auth='user')
-    def player_info(self, player_id=None, **kw):
-        if not player_id:
-            player_id = request.env.user.partner_id.id
+    @http.route(['/app/json/player'], type='json', auth='user')
+    def player_info(self, **kw):
+        player_id = request.env.user.partner_id.id
+        partner = request.env['res.partner'].browse(player_id)
+        player_info = partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]
+        return player_info
+
+    @http.route(['/app/json/player/<int:player_id>'], type='json', auth='user')
+    def community_player_info(self, player_id, period='monthly', **kw):
         partner = request.env['res.partner'].browse(player_id)
         if not partner:
             raise werkzeug.exceptions.NotFound()
-        fields = ['id', 'name', 'email', 'main_kicker_id', 'tagline',
-                  'wins', 'losses', 'win_ratio', 'weekly_wins', 'weekly_losses', 'weekly_win_ratio']
-        return partner.sudo().read(fields)[0]
+        player_info = partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]
+        player_info['stats'] = partner.sudo()._stat_community_player(coplayer_id=request.env.user.partner_id.id, period=period)
+        return player_info
 
     @http.route('/app/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
     def update_profile(self, name, tagline, main_kicker, avatar=None, **kw):
