@@ -12,7 +12,7 @@ from odoo import api, http
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.modules import get_module_resource
-from odoo.addons.web.controllers.main import binary_content, Home
+from odoo.addons.web.controllers.main import Home
 
 _logger = logging.getLogger(__name__)
 
@@ -138,7 +138,7 @@ class KickerController(Home):
     def avatar(self, player_id=None, **kw):
         if not player_id:
             player_id = request.env.user.partner_id.id
-        status, headers, content = binary_content(model='res.partner', id=player_id, field='image_medium', default_mimetype='image/png', env=request.env(user=SUPERUSER_ID))
+        status, headers, content = request.env['ir.http'].sudo().binary_content(model='res.partner', id=player_id, field='image_medium', default_mimetype='image/png')
 
         if not content:
             img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
