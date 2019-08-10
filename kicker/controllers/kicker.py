@@ -104,7 +104,10 @@ class KickerController(Home):
 
     @http.route(['/app/json/players'], type='json', auth='user')
     def list_players(self, **kw):
-        return request.env['res.partner'].search_read([('kicker_player', '=', True)], fields=['id', 'name'])
+        return {
+            "players": request.env['res.partner'].search_read([('kicker_player', '=', True)], fields=['id', 'name']),
+            "player_id":  request.env.user.partner_id.id
+        }
 
     @http.route(['/app/json/kickers'], type='json', auth='user')
     def list_kickers(self, **kw):
@@ -114,22 +117,19 @@ class KickerController(Home):
 
     @http.route(['/kicker/score/submit'], type='json', auth='user', methods=['POST'], csrf=False)
     def submit_score(self, **post):
-        Partner = request.env['res.partner']
-        player11 = post.get('player11') and Partner.browse(int(post.get('player11')))
-        player21 = post.get('player21') and Partner.browse(int(post.get('player21')))
-        if not player11 and player21:
+        team1 = post.get('team1')
+        team2 = post.get('team2')
+        kicker_id = post.get('kicker_id')
+        if not (team1 and team2):
             raise UserError(_('There must be at least one player per team.'))
-        player12 = post.get('player12') and Partner.browse(int(post.get('player12')))
-        player22 = post.get('player22') and Partner.browse(int(post.get('player22')))
-        kicker = request.env['kicker.kicker'].browse(int(post.get('kicker_id')))
         game = request.env['kicker.game'].sudo().create({
-            'kicker_id': kicker.id,
+            'kicker_id': kicker_id,
             'score_1': post.get('score1'),
             'score_2': post.get('score2'),
-            'session_ids':[(0, False, {'player_id': player11.id, 'team': 'team_1'}),
-                           (0, False, {'player_id': player12.id, 'team': 'team_1'}),
-                           (0, False, {'player_id': player21.id, 'team': 'team_2'}),
-                           (0, False, {'player_id': player22.id, 'team': 'team_2'}),],
+            'session_ids':[(0, False, {'player_id': team1[0], 'team': 'team_1'}),
+                           (0, False, {'player_id': len(team1) > 1 and team1[1], 'team': 'team_1'}),
+                           (0, False, {'player_id': team2[0], 'team': 'team_2'}),
+                           (0, False, {'player_id': len(team1) > 1 and team1[1], 'team': 'team_2'}),],
         })
         return {'success': True, 'game_id': game.id}
 

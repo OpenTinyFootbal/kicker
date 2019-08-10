@@ -329,8 +329,9 @@ var AddScore = Widget.extend({
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     events: {
         'submit form.o_kicker_score': '_onSubmit',
+        'change select.o_kicker_players': '_onSelectPlayer',
     },
-    start: function () {
+    willStart: function () {
         var self = this;
         return Promise.all([
             this._rpc({
@@ -344,21 +345,63 @@ var AddScore = Widget.extend({
             .then(function(values) {
                 let players = values[0];
                 let kickers = values[1];
-                self.players = players;
+                self.players = players.players;
+                self.player_id = players.player_id;
                 self.kickers = kickers.kickers;
                 self.default_kicker = kickers.default;
-                self.renderElement();     
-                self.$('select.form-control').select2();       
             });
+    },
+    start: function() {
+        var self = this;
+        return this._super().then(function() {
+            self.$('select.form-control').select2({
+                maximumSelectionSize: 2
+            }); 
+            $(self.$('select.form-control')[0]).select2('val', [self.player_id]);
+        });
+    },
+    _onSelectPlayer: function (ev) {
+        let $target = $(ev.target);
+        let added = ev.added && ev.added.id;
+        let removed = ev.removed && ev.removed.id;
+        let $other_select = this.$('select.o_kicker_players').not($target);
+        _.each($other_select.find('option'), function (option) {
+            if (option.value === added) {
+                option.setAttribute('disabled', 'disabled');
+            } else if (option.value === removed) {
+                option.removeAttribute('disabled');
+            }
+        })
+        console.log(ev);
     },
     _onSubmit: function (ev) {
         ev.preventDefault();
         var self = this;
         var $form = $(ev.target).closest('form');
         var formArray = $form.serializeArray();
-        var params = {};
+        var params = {
+            team1: [],
+            team2: [],
+            score1: undefined,
+            score2: undefined,
+            kicker_id: undefined,
+        };
         for (var i = 0; i < formArray.length; i++){
-            params[formArray[i]['name']] = formArray[i]['value'];
+            /*
+             /!\ very ugly code
+             since needs to interecpt a multiple selection in select2
+             but serialize array will just contain twice the entry
+             so we need to store it in an array when parsing the serialized
+             form. Since we *know* this will only happend twice per key,
+             I can just check if the key is already in the params and if
+             yes, make an array with the existing entry and the new one
+            */
+            let key = formArray[i]['name'];
+            if (key == 'team1' || key == 'team2') {
+                params[key].push(parseInt(formArray[i]['value']));
+            } else {
+                params[key] = formArray[i]['value'];
+            }
         }
         return this._rpc({
             route: '/kicker/score/submit',
@@ -371,8 +414,7 @@ var AddScore = Widget.extend({
             }
             return result;
         }).guardedCatch(function (error) {
-            self._updateStatus($panel, 'failed', error.data.arguments);
-            return error;
+            console.log(error);
         });
     },
 });

@@ -290,7 +290,37 @@
     <t t-name="AddScore">
         <div class="container-fluid o_kicker_main">
             <form method='post' action='/kicker/score/submit' class="o_kicker_score">
-                <h4>Game Location</h4>
+                <div class="form-group">
+                    <label for="team1">Members</label>
+                    <select class="form-control o_kicker_players" name="team1" multiple="multiple">
+                        <t t-if="widget.players">
+                            <t t-foreach="widget.players" t-as="player">
+                                <option t-att-value="player.id"><t t-esc="player.name"/></option>
+                            </t>
+                        </t>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="score1">Score</label>
+                    <input type="number" name="score1" value="0" min="0" step="1" class="form-control"/>
+                </div>
+                <br/>
+                <h4 class="text-center">- versus -</h4>
+                <div class="form-group">
+                    <label for="team2">Members</label>
+                    <select class="form-control o_kicker_players" name="team2" multiple="multiple">
+                        <t t-if="widget.players">
+                            <t t-foreach="widget.players" t-as="player">
+                                <option t-att-value="player.id" t-if="widget.player_id !== player.id"><t t-esc="player.name" /></option>
+                            </t>
+                        </t>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="score2">Score</label>
+                    <input type="number" name="score2" value="0" min="0" step="1" class="form-control"/>
+                </div>
+                                <h4>Game Location</h4>
                 <div class="form-group">
                     <select class="form-control" name="kicker_id">
                         <t t-if="widget.kickers">
@@ -305,59 +335,10 @@
                         </t>
                     </select>
                 </div>
-                <h4>Team 1</h4>
-                <div class="form-group">
-                    <label for="player1">Members</label>
-                    <select class="form-control" name="player11">
-                        <option value="-1">Select player...</option>
-                        <t t-if="widget.players">
-                            <t t-foreach="widget.players" t-as="player">
-                                <option t-att-value="player.id"><t t-esc="player.name"/></option>
-                            </t>
-                        </t>
-                    </select>
-                    <br/>
-                    <select class="form-control" name="player12">
-                        <option value="-1">Select player...</option>
-                        <t t-if="widget.players">
-                            <t t-foreach="widget.players" t-as="player">
-                                <option t-att-value="player.id"><t t-esc="player.name"/></option>
-                            </t>
-                        </t>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="score1">Score</label>
-                    <input type="number" name="score1" value="0" min="0" step="1" class="form-control"/>
-                </div>
                 <br/>
-                <h4>Team 2</h4>
-                <div class="form-group">
-                    <label for="player2">Members</label>
-                    <select class="form-control" name="player21">
-                        <option value="-1">Select player...</option>
-                        <t t-if="widget.players">
-                            <t t-foreach="widget.players" t-as="player">
-                                <option t-att-value="player.id"><t t-esc="player.name"/></option>
-                            </t>
-                        </t>
-                    </select>
-                    <br/>
-                    <select class="form-control" name="player22">
-                        <option value="-1">Select player...</option>
-                        <t t-if="widget.players">
-                            <t t-foreach="widget.players" t-as="player">
-                                <option t-att-value="player.id"><t t-esc="player.name"/></option>
-                            </t>
-                        </t>
-                    </select>
+                <div class="btn-fixed-container">
+                    <button type="submit" class="btn btn-primary btn-block btn-fixed">Save</button>
                 </div>
-                <div class="form-group">
-                    <label for="score2">Score</label>
-                    <input type="number" name="score2" value="0" min="0" step="1" class="form-control"/>
-                </div>
-                <br/>
-                <button type="submit" class="btn btn-outline-primary">Save</button>
             </form>
         </div>
     </t>
