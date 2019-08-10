@@ -169,9 +169,9 @@ var Profile = Widget.extend({
                 self.trigger_up('profileChange', {'player': result.player});
             }
             return result;
-        }).fail(function (type, error) {
+        }).guardedCatch(function (error) {
             console.log(error.data.arguments);
-            return type, error;
+            return error;
         });
     },
     _onSelectImg: function (ev) {
@@ -370,9 +370,9 @@ var AddScore = Widget.extend({
                 Router.navigate('/app/dashboard');
             }
             return result;
-        }).fail(function (type, error) {
+        }).guardedCatch(function (error) {
             self._updateStatus($panel, 'failed', error.data.arguments);
-            return type, error;
+            return error;
         });
     },
 });
