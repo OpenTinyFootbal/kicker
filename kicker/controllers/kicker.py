@@ -98,7 +98,7 @@ class KickerController(Home):
             'main_kicker_id': False if int(main_kicker) == -1 else int(main_kicker),
         }
         if avatar:
-            vals['image'] = avatar
+            vals['image_1920'] = avatar
         partner.write(vals)
         return {'success': True, 'player':partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]}
 
@@ -138,7 +138,7 @@ class KickerController(Home):
     def avatar(self, player_id=None, **kw):
         if not player_id:
             player_id = request.env.user.partner_id.id
-        status, headers, content = request.env['ir.http'].sudo().binary_content(model='res.partner', id=player_id, field='image_medium', default_mimetype='image/png')
+        status, headers, content = request.env['ir.http'].sudo().binary_content(model='res.partner', id=player_id, field='image_256', default_mimetype='image/png')
 
         if not content:
             img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
