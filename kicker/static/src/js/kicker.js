@@ -3,11 +3,10 @@ odoo.define('kicker.app', function (require) {
 
 var core = require('web.core');
 var time = require('web.time');
+var PublicRoot = require('web.public.root').PublicRoot;
 var Widget = require('web.Widget');
 var local_storage = require('web.local_storage');
-var root = require('web_editor.root_widget');
 var Router = require('kicker.router');
-var rpc = require('web.rpc');
 var _t = core._t;
 
 require('web.dom_ready');
@@ -15,7 +14,8 @@ require('web.dom_ready');
 var Dashboard = Widget.extend({
     template: 'Dashboard',
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
-    init: function () {
+    init: function (parent, options) {
+        this._super.apply(this, arguments);
         this.chartData = {
             type: 'line',
             data: {
@@ -57,13 +57,14 @@ var Dashboard = Widget.extend({
     },
     start: function () {
         var self = this;
-        return $.when(
-            rpc.query({
+        return Promise.all([
+            this._rpc({
                 route: '/app/json/dashboard',
             }),
             this._super.apply(this, arguments)
-        )
-            .then(function(data) {
+        ])
+            .then(function(values) {
+                let data = values[0];
                 self.wins = data.wins;
                 self.losses = data.losses;
                 self.teammates = data.teammates;
@@ -100,16 +101,18 @@ var Profile = Widget.extend({
     },
     start: function() {
         var self = this;
-        return $.when(
-            rpc.query({
+        return Promise.all([
+            this._rpc({
                 route: '/app/json/player/'
             }),
-            rpc.query({
+            this._rpc({
                 route: '/app/json/kickers',
             }),
             this._super.apply(this, arguments)
-        )
-        .then(function (player_data, kickers) {
+        ])
+        .then(function (values) {
+            let player_data = values[0];
+            let kickers = values[1]
             self.player = player_data;
             self.kickers = kickers.kickers;
             self.default_kicker = kickers.default;
@@ -152,7 +155,7 @@ var Profile = Widget.extend({
         var files = $form.find('input[type="file"]')[0].files;
         return readFile(files[0], params)
         .then(function () {
-            return rpc.query({
+            return this._rpc({
             route: '/app/json/update_profile',
             params: params
         })})
@@ -213,12 +216,12 @@ var Rankings = Widget.extend({
     },
     start: function () {
         var self = this;
-        return $.when(
+        return Promise.all([
             this._queryData(),
             this._super.apply(this, arguments)
-        )
+        ])
             .then(function(data) {
-                self._renderData(data)
+                self._renderData(data[0])
             });
     },
     _renderData: function(data) {
@@ -262,7 +265,7 @@ var Rankings = Widget.extend({
     },
     _queryData: function() {
         var self=this;
-        return rpc.query({
+        return this._rpc({
             route: '/app/json/rankings',
             params: {"period": this.period},
         }).then(function(data) {
@@ -294,13 +297,14 @@ var Community = Widget.extend({
     xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
     start: function () {
         var self = this;
-        return $.when(
-            rpc.query({
+        return Promise.all([
+            this._rpc({
                 route: '/app/json/community',
             }),
             this._super.apply(this, arguments)
-        )
-            .then(function(data) {
+        ])
+            .then(function(values) {
+                let data = values[0];
                 self.usual = data.usual;
                 self.rare = data.rare;
                 self.renderElement();            
@@ -328,16 +332,18 @@ var AddScore = Widget.extend({
     },
     start: function () {
         var self = this;
-        return $.when(
-            rpc.query({
+        return Promise.all([
+            this._rpc({
                 route: '/app/json/players',
             }),
-            rpc.query({
+            this._rpc({
                 route: '/app/json/kickers',
             }),
             this._super.apply(this, arguments)
-        )
-            .then(function(players, kickers) {
+        ])
+            .then(function(values) {
+                let players = values[0];
+                let kickers = values[1];
                 self.players = players;
                 self.kickers = kickers.kickers;
                 self.default_kicker = kickers.default;
@@ -354,7 +360,7 @@ var AddScore = Widget.extend({
         for (var i = 0; i < formArray.length; i++){
             params[formArray[i]['name']] = formArray[i]['value'];
         }
-        return rpc.query({
+        return this._rpc({
             route: '/kicker/score/submit',
             params: params
         }).then(function (result) {
@@ -382,7 +388,7 @@ var CommunityProfile = Widget.extend({
     },
     willStart: function() {
         var self = this;
-        return rpc.query({
+        return this._rpc({
             route: '/app/json/player/' + this.player_id
         })
         .then(function (player_data) {
@@ -391,12 +397,12 @@ var CommunityProfile = Widget.extend({
     },
 });
 
-var App = Widget.extend({
+var App = PublicRoot.extend({
   xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
   events: {
     'click #burger-toggle, .overlay': '_toggleMenu',
-    "swipeleft .overlay, #sidebar, #top-header": function (ev) {this._toggleMenu(ev, 'close');},
-    'swiperight #top-header, .o_kicker_main':  function (ev) {this._toggleMenu(ev, 'open');},
+    "swiped-left .overlay, #sidebar, #top-header": function (ev) {this._toggleMenu(ev, 'close');},
+    'swiped-right #top-header, .o_kicker_main':  function (ev) {this._toggleMenu(ev, 'open');},
     'click a[data-router]': '_onMenuClick',
   },
   custom_events: {
@@ -502,9 +508,8 @@ var App = Widget.extend({
   },
 });
 
-var app = new App(root);
-var el = $('.o_kicker_app');
-app.attachTo(el);
+var app = new App();
+app.attachTo(document.body);
 
 // Register serviceworker if applicable
 if ('serviceWorker' in navigator) {

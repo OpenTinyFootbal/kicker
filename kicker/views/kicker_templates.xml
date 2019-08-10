@@ -12,7 +12,7 @@
     <script type="text/javascript" src="/kicker/static/lib/Chart.bundle.min.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/router.js"/>
     <script type="text/javascript" src="/kicker/static/src/js/kicker.js"/>
-    <script type="text/javascript" src="/kicker/static/lib/jquery.mobile.custom.min.js"/>
+    <script type="text/javascript" src="/kicker/static/lib/swiped-events.min.js"/>
     <script type="text/javascript" src="/kicker/static/lib/bootstrap-table/bootstrap-table.min.js"/>
     <link rel='stylesheet' type="text/less" href='/kicker/static/lib/bootstrap-table/bootstrap-table.scss'/>
   </xpath>
@@ -161,7 +161,7 @@ App Pages Templates
       <ul id="main-nav" class="nav flex-column">
         <li class="nav-item"><a class="nav-link text-primary" href="/app/dashboard" data-router="true">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link text-primary" href="/app/profile" data-router="true">Profile</a></li>
-        <li class="nav-item"><a class="nav-link text-primary" href="/app/rankings">Rankings</a></li>
+        <li class="nav-item"><a class="nav-link text-primary" href="/app/rankings" data-router="true">Rankings</a></li>
         <li class="nav-item"><a class="nav-link text-primary" href="/app/community" data-router="true">Community</a></li>
       </ul>
       <div id="small-nav">
