@@ -69,6 +69,9 @@ var Dashboard = Widget.extend({
                 self.losses = data.losses;
                 self.teammates = data.teammates;
                 self.nightmares = data.nightmares;
+                self.weekly_wins = data.weekly_wins;
+                self.weekly_losses = data.weekly_losses;
+                self.weekly_win_ratio = data.weekly_win_ratio;
                 self.chartData.data.datasets[0].data = data.graph;
                 self.ratioData.data.datasets[0].data = [data.ratio, 100-data.ratio];
                 self.name = data.name;
@@ -77,8 +80,8 @@ var Dashboard = Widget.extend({
     },
     renderElement: function () {
         var result = this._super.apply(this, arguments);
-        new Chart(this.$('#o_kicker_main_chart')[0].getContext('2d'), this.chartData);
-        new Chart(this.$('#o_kicker_ratio_chart')[0].getContext('2d'), this.ratioData)
+        /*new Chart(this.$('#o_kicker_main_chart')[0].getContext('2d'), this.chartData);
+        new Chart(this.$('#o_kicker_ratio_chart')[0].getContext('2d'), this.ratioData)*/
         return result;
     }    
 });
@@ -428,11 +431,14 @@ var CommunityProfile = Widget.extend({
     },
     willStart: function() {
         var self = this;
-        return this._rpc({
-            route: '/app/json/player/' + this.player_id
-        })
-        .then(function (player_data) {
-            self.player = player_data;
+        return Promise.all([
+            this._rpc({
+                route: '/app/json/player/' + this.player_id
+            }),
+            this._super(),
+        ])
+        .then(function (values) {
+            self.player = values[0];
         });
     },
 });

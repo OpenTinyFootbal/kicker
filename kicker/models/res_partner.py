@@ -123,6 +123,9 @@ class ResPartner(models.Model):
             'teammates': teammates.read(['id', 'name', 'tagline']),
             'nightmares': nightmares.read(['id', 'name', 'tagline']),
             'ratio': self.win_ratio,
+            'weekly_wins': self.weekly_wins,
+            'weekly_losses': self.weekly_losses,
+            'weekly_win_ratio': self.weekly_win_ratio,
             'graph': [58, 69, 61, 85, 89]
         }
         return data
