@@ -135,7 +135,7 @@ class ResPartner(models.Model):
             date_limit = datetime.datetime.now() - relativedelta.relativedelta(months=1)
         elif period=='year':
             date_limit = datetime.datetime.now() - relativedelta.relativedelta(years=1)
-        domain = [('date', '>', date_limit)]
+        domain = [('date', '>', date_limit), ('player_id.kicker_player', '=', True)]
         stats = self.env['kicker.stat'].read_group(domain=domain,
                                                    fields=['player_id', 'won'],
                                                    groupby=['player_id', 'won'],
@@ -145,8 +145,10 @@ class ResPartner(models.Model):
         names = self.browse(partner_ids).read(['name'])
         res = list()
         for pid in partner_ids:
-            wins = list(filter(lambda s: {('player_id','=',pid),('won','=',True)}.issubset(s['__domain']),stats))[0]['__count']
-            losses = list(filter(lambda s: {('player_id','=',pid),('won','=',False)}.issubset(s['__domain']),stats))[0]['__count']
+            wins = list(filter(lambda s: {('player_id','=',pid),('won','=',True)}.issubset(s['__domain']),stats))
+            wins = wins and wins[0]['__count'] or 0
+            losses = list(filter(lambda s: {('player_id','=',pid),('won','=',False)}.issubset(s['__domain']),stats))
+            losses = losses and losses[0]['__count'] or 0
             res.append({
                 'id': pid,
                 'name': list(filter(lambda s: s['id']==pid, names))[0]['name'],
