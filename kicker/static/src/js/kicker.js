@@ -124,23 +124,21 @@ var Profile = Widget.extend({
         this.renderElement();   
     },
     _onSave: function (ev) {
-        function readFile(file, params) {
+        var readFile = function (file, params) {
             var reader = new FileReader();
-            var deferred = $.Deferred();
-        
-            reader.onload = function(event) {
-                deferred.resolve(params['avatar'] = event.target.result.split(',')[1]);
-            };
-            reader.onerror = function() {
-                deferred.reject(this);
-            };
-            if (file) {
+            return new Promise(function(resolve, reject) {
+                if (!file) {
+                    return resolve();
+                }
+                reader.onload = function(event) {
+                    return resolve(params['avatar'] = event.target.result.split(',')[1]);
+                };
+                reader.onerror = function() {
+                    return reject();
+                };
                 reader.readAsDataURL(file);
-            } else {
-                deferred.resolve();
-            }
-            return deferred.promise();
-        }
+            });
+        };
         var self = this;
         var $btn = $(ev.target);
         $btn.prop('disabled', true);
@@ -155,7 +153,7 @@ var Profile = Widget.extend({
         var files = $form.find('input[type="file"]')[0].files;
         return readFile(files[0], params)
         .then(function () {
-            return this._rpc({
+            return self._rpc({
             route: '/app/json/update_profile',
             params: params
         })})

@@ -13,6 +13,7 @@ from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.modules import get_module_resource
 from odoo.addons.web.controllers.main import Home
+from odoo.addons.kicker.tools.image import image_process
 
 _logger = logging.getLogger(__name__)
 
@@ -98,6 +99,7 @@ class KickerController(Home):
             'main_kicker_id': False if int(main_kicker) == -1 else int(main_kicker),
         }
         if avatar:
+            avatar = image_process(avatar, size=(512,512), crop=True)
             vals['image_1920'] = avatar
         partner.write(vals)
         return {'success': True, 'player':partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]}
