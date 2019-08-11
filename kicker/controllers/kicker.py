@@ -122,16 +122,16 @@ class KickerController(Home):
         team1 = post.get('team1')
         team2 = post.get('team2')
         kicker_id = post.get('kicker_id')
-        if not (team1 and team2):
-            raise UserError(_('There must be at least one player per team.'))
+        if not (team1 or team2):
+            raise UserError(_('There must be at least one registered player in the teams composition!'))
         game = request.env['kicker.game'].sudo().create({
             'kicker_id': kicker_id,
             'score_1': post.get('score1'),
             'score_2': post.get('score2'),
-            'session_ids':[(0, False, {'player_id': team1[0], 'team': 'team_1'}),
+            'session_ids':[(0, False, {'player_id': team1 and team1[0], 'team': 'team_1'}),
                            (0, False, {'player_id': len(team1) > 1 and team1[1], 'team': 'team_1'}),
-                           (0, False, {'player_id': team2[0], 'team': 'team_2'}),
-                           (0, False, {'player_id': len(team1) > 1 and team1[1], 'team': 'team_2'}),],
+                           (0, False, {'player_id': team2 and team2[0], 'team': 'team_2'}),
+                           (0, False, {'player_id': len(team2) > 1 and team2[1], 'team': 'team_2'}),],
         })
         return {'success': True, 'game_id': game.id}
 

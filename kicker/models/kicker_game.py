@@ -65,7 +65,7 @@ class KickerSession(models.Model):
     _name = 'kicker.session'
     _description = 'Kicker Session'
 
-    game_id = fields.Many2one('kicker.game', required=True, index=True)
+    game_id = fields.Many2one('kicker.game', required=True, index=True, ondelete='cascade')
     won = fields.Boolean(compute='_compute_won', store=True)
     team = fields.Selection([('team_1', 'Team 1'), ('team_2', 'Team 2')], required=True)
     player_id = fields.Many2one('res.partner', string='Player', index=True,
