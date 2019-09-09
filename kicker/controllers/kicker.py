@@ -3,17 +3,19 @@ import base64
 import jinja2
 import logging
 import random
+import re
 import datetime
 from functools import reduce
 import werkzeug
 
 from odoo import SUPERUSER_ID
-from odoo import api, http
+from odoo import api, http, _
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.modules import get_module_resource
-from odoo.addons.web.controllers.main import Home
 from odoo.addons.kicker.tools.image import image_process
+from odoo.addons.web.controllers.main import Home
+from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 
 _logger = logging.getLogger(__name__)
 
@@ -186,3 +188,13 @@ class KickerController(Home):
                 redirect = '/app'
             return http.redirect_with_hash(redirect)
         return response
+
+class KickerSignupController(AuthSignupHome):
+
+    def do_signup(self, qcontext):
+        email = qcontext.get('login')
+        if email:
+            if not re.match(r"^\w{3}@odoo.com$", email):
+                raise UserError(_("Please use an email in the format <trigram>@odoo.com"))
+
+        return super().do_signup(qcontext)

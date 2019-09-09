@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 import datetime
 from dateutil import relativedelta
@@ -160,3 +161,13 @@ class ResPartner(models.Model):
                 'matches': wins + losses,
             })
         return res
+
+    def write(self, vals):
+        if 'kicker_player' in vals:
+            if not self.user_has_groups('kicker.group_kicker_manager'):
+                raise UserError(_("Only kicker managers can modify a player status"))
+            if vals['kicker_player']:
+                # erase email address upon validation
+                vals['email'] = False
+
+        return super().write(vals)

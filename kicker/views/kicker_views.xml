@@ -156,34 +156,58 @@
         </field>
     </record>
 
+    <record id="view_kicker_players_validate_tree" model="ir.ui.view">
+        <field name="name">res.partner.validate.tree</field>
+        <field name="model">res.partner</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <tree string="Players">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="create_date"/>
+                <field name="kicker_player" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_partners_search_inherit_kicker">
+        <field name="name">res.partner.search.inherit.kicker</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <filter string="Players To Validate"
+                    name="players_to_activate"
+                    domain="[('kicker_player', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+
     <!--
         Actions
     -->
     <record id="kicker_kicker_action_list" model="ir.actions.act_window">
         <field name="name">Kickers</field>
         <field name="res_model">kicker.kicker</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <record id="kicker_ping_action_list" model="ir.actions.act_window">
         <field name="name">Pings</field>
         <field name="res_model">kicker.ping</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree</field>
     </record>
 
     <record id="kicker_game_action_list" model="ir.actions.act_window">
         <field name="name">Games</field>
         <field name="res_model">kicker.game</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <record id="kicker_session_action_list" model="ir.actions.act_window">
         <field name="name">Sessions</field>
         <field name="res_model">kicker.session</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree</field>
     </record>
 
@@ -191,10 +215,19 @@
         <field name="name">Players</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">res.partner</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('kicker_player', '=', True)]</field>
         <field name="context">{'default_kicker_player': True}</field>
+    </record>
+
+    <record id="kicker_player_action_to_validate_list" model="ir.actions.act_window">
+        <field name="name">Players to Validate</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_kicker_players_validate_tree"/>
+        <field name="domain">['|', ('email', '=like', '%@odoo.com'), ('kicker_player', '=', True)]</field>
+        <field name="context">{'search_default_players_to_activate': 1}</field>
     </record>
 
     <!--
@@ -242,4 +275,13 @@
         parent="kicker_menu_root"
         action="kicker_player_action_list"
         sequence="25"/>
+
+    <menuitem
+        id="kicker_menu_partner_list_validate"
+        name="Players to Validate"
+        parent="kicker_menu_root"
+        action="kicker_player_action_to_validate_list"
+        groups="kicker.group_kicker_manager"
+        sequence="30"/>
+
 </odoo>
