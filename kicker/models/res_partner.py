@@ -171,3 +171,13 @@ class ResPartner(models.Model):
                 vals['email'] = False
 
         return super().write(vals)
+
+    def validate_kicker_signup(self):
+        signup_template = self.env.ref('kicker.validate_signup')
+        for partner in self:
+            signup_template.send_mail(partner.id)
+            partner.kicker_player = True
+            user = partner.user_ids
+            if len(user) > 1:
+                raise UserError(_("There is more than one user for partner %s - make sure only one user is linked to this partner!") % partner.name)
+            user.login = partner.name

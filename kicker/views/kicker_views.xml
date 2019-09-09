@@ -165,7 +165,7 @@
                 <field name="name"/>
                 <field name="email"/>
                 <field name="create_date"/>
-                <field name="kicker_player" widget="boolean_toggle" />
+                <button type="object" name="validate_kicker_signup" icon="fa-check" string="Validate Signup"/>
             </tree>
         </field>
     </record>

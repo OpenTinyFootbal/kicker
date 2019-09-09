@@ -13,6 +13,7 @@
         'views/kicker_templates.xml',
         'views/kicker_views.xml',
         'data/kicker_data.xml',
+        'data/mail_templates.xml',
     ],
     'demo': [
         'data/kicker_demo.xml',

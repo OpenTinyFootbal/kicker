@@ -90,6 +90,17 @@ Login Restyling
   <xpath expr="//label[@for='name']" position="replace">
     <label for="name">Your Player Name (login)</label>
   </xpath>
+  <xpath expr="." position="inside">
+    <div class="alert alert-info">
+      <p>Your account will require manual validation before being able to access the app.
+      <button class='btn btn-sm btn-link' data-toggle='collapse' data-target='#o_kicker_privacy'><i class="fa fa-question-circle"/> Why</button></p>
+      <div class="collapse" id="o_kicker_privacy">
+        <p>We take your privacy seriously, therefore we want to make sure that all new users are <em>actual</em> Odoo employees and <em>actual</em> kicker players.</p>
+        <p>We don't want this app to become an employee monitoring tool for team leaders or managers.</p>
+        <p>We will contact you directly to confirm your sign-up request personnally before validating your account.</p>
+      </div>
+    </div>
+  </xpath>
 </template>
 
 <!-- Reveal password field (button to see the password). The only param is name (the nname attribute of the field)-->

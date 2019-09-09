@@ -1,5 +1,6 @@
 import ast
 import base64
+import functools
 import jinja2
 import logging
 import random
@@ -21,6 +22,16 @@ _logger = logging.getLogger(__name__)
 
 SERVER_START = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d-%H%M')
 
+def check_kicker_user(func):
+    """Check that a user is correctly set up for accessing kicker-related resources."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        user = request.env.user
+        if not user.kicker_player:
+            _logger.warn('user %s tried to access kicker-protected data but is not a kicker player', user.login)
+            raise werkzeug.exceptions.Forbidden()
+        return func(*args, **kwargs)
+    return wrapper
 
 class KickerController(Home):
 
@@ -56,6 +67,7 @@ class KickerController(Home):
             return False
 
     @http.route(['/app/', "/app/<path:route>"], auth="user")
+    @check_kicker_user
     def app(self, **kw):
         return request.render('kicker.app', {'body_classname': 'o_kicker_app', 'user': request.env.user})
 
@@ -66,22 +78,26 @@ class KickerController(Home):
 
     # JSON routes
     @http.route('/app/json/dashboard', type='json', auth='user', csrf=False)
+    @check_kicker_user
     def dashboard(self, **kw):
         partner = request.env.user.partner_id
         return partner._dashboard_stats()
 
     @http.route('/app/json/rankings', type='json', auth='user', csrf=False)
+    @check_kicker_user
     def rankings(self, period='month', **kw):
         partner = request.env.user.partner_id.sudo()
         return partner._get_rankings(period=period)
 
 
     @http.route('/app/json/community', type='json', auth='user', csrf=False)
+    @check_kicker_user
     def community(self, **kw):
         partner = request.env.user.partner_id
         return partner._community_stats()
 
     @http.route(['/app/json/player', '/app/json/player/<int:player_id>'], type='json', auth='user')
+    @check_kicker_user
     def player_info(self, player_id=None, **kw):
         if not player_id:
             player_id = request.env.user.partner_id.id
@@ -93,6 +109,7 @@ class KickerController(Home):
         return partner.sudo().read(fields)[0]
 
     @http.route('/app/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
+    @check_kicker_user
     def update_profile(self, name, tagline, main_kicker, avatar=None, **kw):
         partner = request.env.user.partner_id
         vals = {
@@ -107,6 +124,7 @@ class KickerController(Home):
         return {'success': True, 'player':partner.read(['id', 'name', 'email', 'main_kicker_id', 'tagline'])[0]}
 
     @http.route(['/app/json/players'], type='json', auth='user')
+    @check_kicker_user
     def list_players(self, **kw):
         return {
             "players": request.env['res.partner'].search_read([('kicker_player', '=', True)], fields=['id', 'name']),
@@ -114,12 +132,14 @@ class KickerController(Home):
         }
 
     @http.route(['/app/json/kickers'], type='json', auth='user')
+    @check_kicker_user
     def list_kickers(self, **kw):
         kickers = request.env['kicker.kicker'].sudo().search_read([], fields=['id', 'name'])
         default = request.env.user.partner_id.main_kicker_id.id
         return {'kickers': kickers, 'default': default}
 
     @http.route(['/kicker/score/submit'], type='json', auth='user', methods=['POST'], csrf=False)
+    @check_kicker_user
     def submit_score(self, **post):
         team1 = post.get('team1')
         team2 = post.get('team2')
@@ -182,10 +202,12 @@ class KickerController(Home):
     def web_login(self, redirect=None, *args, **kw):
         response = super(KickerController, self).web_login(redirect=redirect, *args, **kw)
         if not redirect and request.params['login_success']:
-            if request.env['res.users'].browse(request.uid).has_group('base.group_user'):
+            if request.env.user.has_group('base.group_user'):
                 redirect = b'/web?' + request.httprequest.query_string
-            else:
+            elif request.env.user.kicker_player:
                 redirect = '/app'
+            else:
+                redirect = '/'
             return http.redirect_with_hash(redirect)
         return response
 
@@ -193,8 +215,12 @@ class KickerSignupController(AuthSignupHome):
 
     def do_signup(self, qcontext):
         email = qcontext.get('login')
+        name = qcontext.get('name')
+        if request.env['res.users'].sudo().with_context(active_test=False).search([('login', '=', name)]):
+            raise UserError(_("This user name is already in use."))
+        if not re.match(r"^\w+$", name):
+            raise UserError(_("You login can only contain letters (case-sensitive), numbers or underscores (_). You will be able to change your app handle in the app later on."))
         if email:
             if not re.match(r"^\w{3}@odoo.com$", email):
                 raise UserError(_("Please use an email in the format <trigram>@odoo.com"))
-
         return super().do_signup(qcontext)
