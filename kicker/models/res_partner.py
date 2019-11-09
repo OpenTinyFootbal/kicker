@@ -175,7 +175,7 @@ class ResPartner(models.Model):
     def validate_kicker_signup(self):
         signup_template = self.env.ref('kicker.validate_signup')
         for partner in self:
-            signup_template.send_mail(partner.id)
+            signup_template.send_mail(partner.id, force_send=True)
             partner.kicker_player = True
             user = partner.user_ids
             if len(user) > 1:
