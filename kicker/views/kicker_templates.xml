@@ -93,7 +93,7 @@ Login Restyling
   <xpath expr="." position="inside">
     <div class="alert alert-info">
       <p>Your account will require manual validation before being able to access the app.
-      <button class='btn btn-sm btn-link' data-toggle='collapse' data-target='#o_kicker_privacy'><i class="fa fa-question-circle"/> Why</button></p>
+      <button class='btn btn-sm btn-link' data-toggle='collapse' data-target='#o_kicker_privacy'><i class="fa fa-question-circle" type="button"/> Why</button></p>
       <div class="collapse" id="o_kicker_privacy">
         <p>We take your privacy seriously, therefore we want to make sure that all new users are <em>actual</em> Odoo employees and <em>actual</em> kicker players.</p>
         <p>We don't want this app to become an employee monitoring tool for team leaders or managers.</p>
@@ -155,6 +155,7 @@ App Pages Templates
     <t t-set="head">
         <link rel="manifest" href="/kicker/static/manifest.webmanifest"/>
         <meta name="theme-color" content="#FC812F"/>
+        <t t-set="body_classname">o_kicker_app</t>
     </t>
     <!-- Close Sidebar Button -->
     <div class="row" id="top-header">
@@ -162,9 +163,6 @@ App Pages Templates
             <span id="burger-toggle" class="d-block d-md-none">
                 <img src="/kicker/static/icons/burger.svg" width="14px" alt=""/>
             </span>
-        </div>
-        <div class="col-4 col-lg-2 o_kicker_status o_status_free">
-            <strong>Free</strong>
         </div>
     </div>
 

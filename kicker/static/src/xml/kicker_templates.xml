@@ -3,7 +3,7 @@
     <t t-name="Dashboard">
         <div class="container-fluid o_kicker_main o_kicker_dashboard">
             <div class="row">
-                <div class="col-md-12 col-lg-6">
+                <div class="col-12 col-lg-6 o_kicker_dashboard_section">
                     <h5 class="text-primary"><strong>Hello <t t-esc="widget.name || 'darling'"/>,</strong></h5>
                     <h6 class="text-muted">Please note that you suck at this.</h6>
                     <div class="o_score_card">
@@ -18,23 +18,25 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-12 col-lg-6 o_kicker_dashboard_section">
                     <h5 class="text-primary"><strong>Weekly Stats</strong></h5>
                     <div class="row">
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-trophy mb8 text-primary"/>
                                 <h5 class="card-title">Won</h5>
                                 <p class="card-text" t-esc="widget.weekly_wins"/>
                             </div>
                         </div>
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-thumbs-down mb8 text-primary"/>
                                 <h5 class="card-title">Lost</h5>
                                 <p class="card-text" t-esc="widget.weekly_losses"/>
                             </div>
                         </div>
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-percent mb8 text-primary"/>
                                 <h5 class="card-title">Ratio</h5>
@@ -42,19 +44,8 @@
                             </div>
                         </div>
                     </div>
-                    <!--<h5 class="text-primary"><strong>Your Statistics</strong></h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="o_kicker_ratio_chart" width="100" height="100"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="o_kicker_main_chart" width="400" height="400"></canvas>
-                        </div>
-                    </div>-->
                 </div>
-                <div class="col-md-12 col-lg-6">
+                <div class="col-12 col-lg-6 o_kicker_dashboard_section">
                     <h5 class="text-primary "><strong>Your Best Teammates</strong></h5>
                     <div class="container-fluid">
                         <div class="row o_kicker_user_row">
@@ -183,21 +174,21 @@
                 <div class="container mt64">
                     <h4>Weekly Stats</h4>
                     <div class="row">
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 border-light text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-trophy mb8 text-primary"/>
                                 <h5 class="card-title">Won</h5>
                                 <p class="card-text" t-esc="widget.player.weekly_wins"/>
                             </div>
                         </div>
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 border-light text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-thumbs-down mb8 text-primary"/>
                                 <h5 class="card-title">Lost</h5>
                                 <p class="card-text" t-esc="widget.player.weekly_losses"/>
                             </div>
                         </div>
-                        <div class="card col-4 border-light text-center">
+                        <div class="card col-4 border-light text-center o_kicker_stat_card">
                             <div class="card-body">
                                 <i class="fa fa-3x fa-percent mb8 text-primary"/>
                                 <h5 class="card-title">Ratio</h5>
@@ -222,13 +213,13 @@
             </div>
             <div class="btn-group btn-group-toggle mb8 container o_ranking_period" data-toggle="buttons">
                 <label t-attf-class="btn btn-outline-primary col {{widget.period=='week'?'active':''}}">
-                    <input type="radio" name="period" value="week" autocomplete="off" checked="checked"/> Weekly
+                    <input type="radio" name="period" value="week" autocomplete="new-password" checked="checked"/> Weekly
                 </label>
                 <label t-attf-class="btn btn-outline-primary col {{widget.period=='month'?'active':''}}">
-                    <input type="radio" name="period" value="month" autocomplete="off"/> Monthly
+                    <input type="radio" name="period" value="month" autocomplete="new-password"/> Monthly
                 </label>
                 <label t-attf-class="btn btn-outline-primary col {{widget.period=='year'?'active':''}}">
-                    <input type="radio" name="period" value="year" autocomplete="off"/> Yearly
+                    <input type="radio" name="period" value="year" autocomplete="new-password"/> Yearly
                 </label>
             </div>
             <div class="container-fluid">
@@ -321,10 +312,10 @@
 
     <t t-name="AddScore">
         <div class="container-fluid o_kicker_main">
-            <form method='post' action='/kicker/score/submit' class="o_kicker_score">
+            <form method='post' action='/kicker/score/submit' class="o_kicker_score" autocomplete="off">
                 <div class="form-group">
                     <label for="team1">Players</label>
-                    <select class="form-control o_kicker_players" name="team1" multiple="multiple" autcomplete="off">
+                    <select class="form-control o_kicker_players" name="team1" multiple="multiple" autocomplete="off">
                         <t t-if="widget.players">
                             <t t-foreach="widget.players" t-as="player">
                                 <option t-att-value="player.id"><t t-esc="player.name"/></option>
@@ -340,7 +331,7 @@
                 <h4 class="text-center">- versus -</h4>
                 <div class="form-group">
                     <label for="team2">Players</label>
-                    <select class="form-control o_kicker_players" name="team2" multiple="multiple" autcomplete="off">
+                    <select class="form-control o_kicker_players" name="team2" multiple="multiple" autocomplete="off">
                         <t t-if="widget.players">
                             <t t-foreach="widget.players" t-as="player">
                                 <option t-att-value="player.id" t-if="widget.player_id !== player.id"><t t-esc="player.name" /></option>

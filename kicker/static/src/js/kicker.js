@@ -3,9 +3,8 @@ odoo.define('kicker.app', function (require) {
 
 var core = require('web.core');
 var time = require('web.time');
-var PublicRoot = require('web.public.root').PublicRoot;
 var Widget = require('web.Widget');
-var local_storage = require('web.local_storage');
+var publicWidget = require('web.public.widget');
 var Router = require('kicker.router');
 var _t = core._t;
 
@@ -443,12 +442,15 @@ var CommunityProfile = Widget.extend({
     },
 });
 
-var App = PublicRoot.extend({
+publicWidget.registry.kickerApp = publicWidget.Widget.extend({
+  selector: '.o_kicker_app',
   xmlDependencies: ['/app/static/src/xml/kicker_templates.xml'],
   events: {
     'click #burger-toggle, .overlay': '_toggleMenu',
-    "swiped-left .overlay, #sidebar, #top-header": function (ev) {this._toggleMenu(ev, 'close');},
+    /* I'd rather disable swiping as it tends to intefrere too easily
+    'swiped-left .overlay, #sidebar, #top-header': function (ev) {this._toggleMenu(ev, 'close');},
     'swiped-right #top-header, .o_kicker_main':  function (ev) {this._toggleMenu(ev, 'open');},
+    */
     'click a[data-router]': '_onMenuClick',
   },
   custom_events: {
@@ -553,9 +555,6 @@ var App = PublicRoot.extend({
     this.$el.find('.user_name').text(e.data.player.name);
   },
 });
-
-var app = new App();
-app.attachTo(document.body);
 
 // Register serviceworker if applicable
 if ('serviceWorker' in navigator) {

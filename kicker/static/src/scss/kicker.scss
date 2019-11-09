@@ -9,7 +9,10 @@ body, html {
 }
 
 body {
-    overflow: hidden;  /*makes the body non-scrollable (we will add scrolling to the sidebar and main content containers)*/
+    &.o_kicker_app {
+        overflow: hidden;  /*makes the body non-scrollable (we will add scrolling to the sidebar and main content containers)*/
+    }
+    overflow-x: hidden;
     margin: 0px;  /*removes default style*/
     display: flex;  /*enables flex content for its children*/
     box-sizing: border-box;
@@ -271,6 +274,23 @@ $rand: random(5);
 
 }
 
+.o_kicker_dashboard {
+  .o_kicker_dashboard_section {
+    &:nth-child(even) {
+      background-color: rgb(230,230,230);
+      .card {
+        background-color: transparent;
+        border-color: transparent;
+        .card-body {
+          background-color: transparent !important;
+        }
+      }
+    }
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+}
+
 .o_kicker_profile {
   position: relative;
 
@@ -333,6 +353,10 @@ $rand: random(5);
   }
 }
 
+.o_kicker_stat_card {
+  padding: 0;
+}
+
 .gradient-border {
   position: relative;
   margin-bottom: 1em;
@@ -391,6 +415,7 @@ $rand: random(5);
   border-radius: 100%;
   margin-top: -400px;
   left: -25%;
+  z-index: -1;
 
   img {
     position: absolute;
@@ -414,10 +439,11 @@ $rand: random(5);
     width: 60%;
   }
   height: 240px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   border-radius: 100%;
   margin-left: -40%;
   margin-bottom: -150px;
+  z-index: -1;
 }
