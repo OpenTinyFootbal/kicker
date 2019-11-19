@@ -224,3 +224,15 @@ class KickerSignupController(AuthSignupHome):
             if not re.match(r"^\w{3}@odoo.com$", email):
                 raise UserError(_("Please use an email in the format <trigram>@odoo.com"))
         return super().do_signup(qcontext)
+
+    @http.route('/kicker/signup', auth='public', type='json', methods=['POST'])
+    def kicker_signup(self, login, password, email):
+        if request.env['res.users'].sudo().with_context(active_test=False).search([('login', '=', login)]):
+            raise UserError(_("This user name is already in use."))
+        if not re.match(r"^\w+$", login):
+            raise UserError(_("Your login can only contain letters (case-sensitive), numbers or underscores (_). You will be able to change your handle in the app later on."))
+        if email:
+            if not re.match(r"^\w{3}@odoo.com$", email):
+                raise UserError(_("Please use an email in the format <trigram>@odoo.com"))
+        portal_group = request.env.ref('base.group_portal')
+        request.env['res.users'].sudo().with_context(no_reset_password=True).create({'name': login, 'email': email, 'login': login, 'password': password, 'groups_id': [(4, portal_group.id, False)]})
