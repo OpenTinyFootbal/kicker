@@ -110,12 +110,12 @@ class KickerController(Home):
 
     @http.route('/app/json/update_profile', type='json', auth='user', methods=['POST'], csrf=False)
     @check_kicker_user
-    def update_profile(self, name, tagline, main_kicker, avatar=None, **kw):
+    def update_profile(self, name, tagline=None, main_kicker=None, avatar=None, **kw):
         partner = request.env.user.partner_id
         vals = {
             'name': name,
             'tagline': tagline,
-            'main_kicker_id': False if int(main_kicker) == -1 else int(main_kicker),
+            'main_kicker_id': int(main_kicker) if main_kicker else False,
         }
         if avatar:
             avatar = image_process(avatar, size=(512,512), crop=True)
@@ -144,8 +144,16 @@ class KickerController(Home):
         team1 = post.get('team1')
         team2 = post.get('team2')
         kicker_id = post.get('kicker_id')
-        if not (team1 or team2):
+        _logger.info(post)
+        public_player = request.env.ref('kicker.anon_res_partner')
+        player11 = team1[0] or public_player.id
+        player12 = team1[1] or public_player.id
+        player21 = team2[0] or public_player.id
+        player22 = team2[1] or public_player.id
+        if not (team1 or team2) or not (team1[0] or team1[1] or team2[0] or team2[1]):
             raise UserError(_('There must be at least one registered player in the teams composition!'))
+        if not post.get('score1') and post.get('score2'):
+            raise UserError(_('Please input the score'))
         game = request.env['kicker.game'].sudo().create({
             'kicker_id': kicker_id,
             'score_1': post.get('score1'),
