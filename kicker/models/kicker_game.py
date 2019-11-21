@@ -27,10 +27,13 @@ class KickerGame(models.Model):
     @api.depends('score_1', 'score_2', 'session_ids')
     def _compute_name(self):
         for game in self:
-            game.name = '@'.join([
-                self.env['ir.qweb.field.date'].value_to_html(game.date, {}),
-                game.kicker_id.name
-            ])
+            if not game.id:
+                game.name = 'New Game'
+            else:
+                game.name = '@'.join([
+                    self.env['ir.qweb.field.date'].value_to_html(game.date, {}),
+                    game.kicker_id.name
+                ])
     
 #    @api.constrains('session_ids')
 #    def _validate_session(self):
