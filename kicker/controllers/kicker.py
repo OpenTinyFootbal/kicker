@@ -105,10 +105,13 @@ class KickerController(Home):
         kicker_id = post.get('kicker_id')
         _logger.info(post)
         public_player = request.env.ref('kicker.anon_res_partner')
-        player11 = team1[0] or public_player.id
-        player12 = team1[1] or public_player.id
-        player21 = team2[0] or public_player.id
-        player22 = team2[1] or public_player.id
+        player11 = len(team1) > 0  and team1[0] or public_player.id
+        player12 = len(team1) > 1 and team1[1] or public_player.id
+        player21 = len(team2) > 0 and team2[0] or public_player.id
+        player22 = len(team2) > 1 and team2[1] or public_player.id
+        all_players = set([player11, player12, player21, player22])
+        if len(all_players) < 2:
+            raise UserError(_('You must select at least one player!'))
         if not (team1 or team2) or not (team1[0] or team1[1] or team2[0] or team2[1]):
             raise UserError(_('There must be at least one registered player in the teams composition!'))
         if not post.get('score1') and post.get('score2'):
