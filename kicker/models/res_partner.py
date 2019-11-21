@@ -50,7 +50,8 @@ class ResPartner(models.Model):
 
     def _get_teammeates(self, period=False, limit=6):
         self.ensure_one()
-        domain = [('player_id', '=', self.id), ('won', '=', True)]
+        external_player = self.env.ref('kicker.anon_res_partner')
+        domain = [('player_id', '=', self.id), ('won', '=', True), ('teammate_id', '!=', external_player.id)]
         if period=='month':
             month_ago = datetime.datetime.now() - relativedelta.relativedelta(months=1)
             domain.append([('date', '>', month_ago)])
