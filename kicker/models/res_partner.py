@@ -16,6 +16,7 @@ class ResPartner(models.Model):
     weekly_win_ratio = fields.Integer(compute='_compute_stats', string='Weekly Win Ratio')
     kicker_player = fields.Boolean()
     main_kicker_id = fields.Many2one('kicker.kicker', 'Default Kicker')
+    ole_rating = fields.Integer('General score', default=1500, readonly=True)
     tagline = fields.Char()
 
     @api.depends('kicker_session_ids')
@@ -182,3 +183,15 @@ class ResPartner(models.Model):
             if len(user) > 1:
                 raise UserError(_("There is more than one user for partner %s - make sure only one user is linked to this partner!") % partner.name)
             user.login = partner.name
+
+    def _get_average_rating(self):
+        assert len(self) == 2
+        return (self[0].ole_rating + self[1].ole_rating) / 2.0
+
+    def _set_rating(self, team_rating):
+        """ distribute new rating to team player depending on their previous rating"""
+        assert len(self) == 2
+        rating_sum = sum(self.mapped('ole_rating'))
+        for player in self:
+            new_rate = round(player.ole_rating / rating_sum * 2 * team_rating)
+            player.ole_rating = new_rate
