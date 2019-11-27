@@ -97,7 +97,7 @@
         </record>
 
         <function model="kicker.game" name="_generate_demo_data">
-            <value eval='1000'/>
-        </function> 
+            <value eval='2'/>
+        </function>
     </data>
 </odoo>
