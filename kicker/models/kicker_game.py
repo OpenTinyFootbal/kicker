@@ -6,9 +6,6 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import random
 
-# ole rating constant
-K = 32
-
 class KickerGame(models.Model):
     _name = 'kicker.game'
     _description = 'Kicker Game'
@@ -37,35 +34,12 @@ class KickerGame(models.Model):
                     self.env['ir.qweb.field.date'].value_to_html(game.date, {}),
                     game.kicker_id.name
                 ])
-
-    @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        if res.session_ids:
-            res._update_ole_rating()
-        return res
-
+    
 #    @api.constrains('session_ids')
 #    def _validate_session(self):
 #        for game in self:
 #            if len(game.session_ids != 4):
 #                raise ValidationError(_('There must be 4 players per game'))
-
-    def _update_ole_rating(self):
-        """ Update the rating of the 4 players after a match is played. The rating
-        is inspire of the chess elo rating system but adated for team of two. """
-        self.ensure_one()
-        constant = K + abs(self.score_1 - self.score_2)
-        winners = self.session_ids.filtered('won').mapped('player_id')
-        loosers = self.session_ids.mapped('player_id') - winners
-        winners_rating = winners._get_average_rating()
-        loosers_rating = loosers._get_average_rating()
-        expected_rating_winner = 1 / (1 + 10 ** ((loosers_rating - winners_rating) / 400.0))
-        expected_rating_looser = 1 / (1 + 10 ** ((winners_rating - loosers_rating) / 400.0))
-        new_rating_winners = winners_rating + constant * (1 - expected_rating_winner)
-        new_rating_loosers = loosers_rating + constant * (- expected_rating_looser)
-        winners._set_rating(new_rating_winners)
-        loosers._set_rating(new_rating_loosers)
 
     @api.model
     def _generate_demo_data(self, amount=100):
