@@ -148,19 +148,21 @@ class ResPartner(models.Model):
                                                    lazy=False)
         # proably possible to get it in the read_group, i'm being lazy
         partner_ids = set(map(lambda s: s['player_id'][0], stats))
-        names = self.browse(partner_ids).read(['name'])
+        partner_datas = self.browse(partner_ids).read(['name', 'ole_rating'])
         res = list()
         for pid in partner_ids:
+            p_data = list(filter(lambda s: s['id']==pid, partner_datas))[0]
             wins = list(filter(lambda s: {('player_id','=',pid),('won','=',True)}.issubset(s['__domain']),stats))
             wins = wins and wins[0]['__count'] or 0
             losses = list(filter(lambda s: {('player_id','=',pid),('won','=',False)}.issubset(s['__domain']),stats))
             losses = losses and losses[0]['__count'] or 0
             res.append({
                 'id': pid,
-                'name': list(filter(lambda s: s['id']==pid, names))[0]['name'],
+                'name': p_data['name'],
                 'won': wins,
                 'lost': losses,
                 'matches': wins + losses,
+                'ole_rating': p_data['ole_rating'],
             })
         return res
 
